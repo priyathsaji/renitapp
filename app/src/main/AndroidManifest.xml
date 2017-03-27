@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rentit.priyath.rentitlayout">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="Location"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AdList"
+            android:label="Location"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Details1"
+            android:label="Location"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".myAds"
+            android:label="@string/title_activity_my_ads"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".wishlist"
+            android:label="Location"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".history"
+            android:label="Location"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".location"
+            android:label="Location"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".chatActivity"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PostAdActivity"
+            android:label="@string/title_activity_post_ad"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".chatInterface"
+            android:label="@string/title_activity_chat_interface"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>

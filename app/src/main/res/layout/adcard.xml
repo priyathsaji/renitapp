@@ -1,0 +1,69 @@
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/rangebar"
+    android:layout_marginRight="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginBottom="8dp"
+    android:id="@+id/card1"
+    card_view:cardCornerRadius="10dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:src="@drawable/default_image"
+            android:id="@+id/AdImage"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="chat"
+            android:id="@+id/chatButton"
+            android:layout_alignParentRight="true"
+            android:background="#bcbcbc"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AdImage"
+            android:id="@+id/AdTitle"
+            android:textSize="25dp"
+            android:gravity="center_horizontal"
+            android:text="Item Title" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AdTitle"
+            android:id="@+id/location"
+            android:text="Location of Item"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AdTitle"
+            android:id="@+id/Rentcost"
+            android:textSize="25dp"
+            android:layout_alignParentRight="true"
+            android:text="Rent in Rs"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/location"
+            android:rating="3"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:clickable="false"
+            android:id="@+id/rating"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Rentcost"
+            android:id="@+id/rentButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="Rent"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/housegeneral"
+        android:scaleType="centerCrop"
+        android:id="@+id/listGeneralImage"/>
+    <com.appyvet.rangebar.RangeBar
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rangebar"
+        android:layout_below="@+id/listGeneralImage"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        custom:tickStart="0"
+        custom:tickInterval="5000"
+        custom:tickEnd="30000"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Budget: "
+        android:textStyle="bold"
+        android:layout_below="@+id/listGeneralImage"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textSize="20dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:id="@+id/budgettview"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/listGeneralImage"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="0 Rs to 30000 Rs+"
+        android:textSize="20dp"
+        android:id="@+id/budgetrange"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
