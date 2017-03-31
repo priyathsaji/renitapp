@@ -62,7 +62,7 @@ public class history extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.History) {
             return true;
         }
 
@@ -93,8 +93,7 @@ public class history extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.History) {
-            Intent intent =  new Intent(this,history.class);
-            startActivity(intent);
+
 
         }else if (id == R.id.chat) {
             Intent intent =  new Intent(this,chatActivity.class);

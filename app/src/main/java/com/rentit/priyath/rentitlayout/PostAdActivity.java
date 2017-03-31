@@ -79,8 +79,6 @@ public class PostAdActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
-            Intent intent = new Intent(this,PostAdActivity.class);
-            startActivity(intent);
 
         } else if (id == R.id.Wishlist) {
             Intent intent = new Intent(this,wishlist.class);

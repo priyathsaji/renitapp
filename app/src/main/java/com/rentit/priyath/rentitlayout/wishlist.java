@@ -83,8 +83,6 @@ public class wishlist extends AppCompatActivity
         } else if (id == R.id.postAds) {
 
         } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
-            startActivity(intent);
 
         } else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);

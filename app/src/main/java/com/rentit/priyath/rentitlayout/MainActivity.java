@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         // To change the username and profile photo field in nav drawer
         View hView =  navigationView.getHeaderView(0);
         TextView nav_user = (TextView)hView.findViewById(R.id.username);
@@ -85,7 +86,6 @@ public class MainActivity extends AppCompatActivity
         }
     public void startIntent(int position){
         Intent intent = new Intent(getApplicationContext(), AdList.class);
-        intent.putExtra("url number",position);
         startActivity(intent);
     }
 
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.home) {
             return true;
         }
 
@@ -128,30 +128,35 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.home) {
-            Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
+
         } else if (id == R.id.MyAds) {
             Intent intent = new Intent(this,myAds.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
             Intent intent = new Intent(this,PostAdActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.Wishlist) {
             Intent intent = new Intent(this,wishlist.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.History) {
             Intent intent =  new Intent(this,history.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         }else if (id == R.id.chat) {
             Intent intent =  new Intent(this,chatActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         }
