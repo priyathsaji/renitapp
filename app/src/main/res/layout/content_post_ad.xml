@@ -59,28 +59,121 @@
                 android:gravity="center"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
-
-    <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_below="@+id/AdDetails"
-        android:src="@drawable/add"
-        android:background="#ffffff"
-        android:id="@+id/addImage"/>
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Click the plus image to add images"
-        android:textSize="25dp"
-        android:layout_marginTop="30dp"
-        android:layout_toRightOf="@+id/addImage"
+        android:id="@+id/imageButtonLayout"
         android:layout_below="@+id/AdDetails"
-        android:gravity="center"/>
+        android:weightSum="3">
+         <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:src="@drawable/add"
+             android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/AdImage1"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:src="@drawable/add"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/AdImage2"/>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:id="@+id/AdImage3"
+            android:src="@drawable/add"
+            android:background="#ffffff"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarLayout"
+        android:layout_below="@+id/AdDetails"
+        android:weightSum="3">
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:visibility="gone"
+            android:id="@+id/progressBar1"/>
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:visibility="gone"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/progressBar2"/>
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:visibility="gone"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/progressBar3"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonLayout2"
+        android:layout_marginTop="2dp"
+        android:layout_below="@+id/imageButtonLayout"
+        android:weightSum="3">
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:src="@drawable/add"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/AdImage4"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:src="@drawable/add"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/AdImage5"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarLayout2"
+        android:layout_below="@+id/imageButtonLayout"
+        android:weightSum="3">
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:visibility="gone"
+            android:id="@+id/progressBar4"/>
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_weight = "1"
+            android:visibility="gone"
+            android:layout_marginRight="2dp"
+            android:background="#ffffff"
+            android:id="@+id/progressBar5"/>
+    </LinearLayout>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/addImage"
+        android:layout_below="@+id/imageButtonLayout2"
         android:id="@+id/title"
         android:hint="Title"
         />
@@ -89,98 +182,48 @@
         android:layout_height="60dp"
         android:layout_below="@+id/title"
         android:id="@+id/subinfo1"
-        android:hint="sub Information 1"
+        android:hint="Rent"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/subinfo1"
         android:id="@+id/subinfo2"
-        android:hint="sub Information 2"
+        android:hint="Location"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/subinfo2"
         android:id="@+id/subinfo3"
-        android:hint="sub Information 3"
+        android:hint="Area"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/subinfo3"
         android:id="@+id/subinfo4"
-        android:hint="sub Information 4"
+        android:hint="Bedrooms"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/subinfo4"
+        android:id="@+id/subinfo5"
+        android:hint="Bathrooms"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_below="@+id/subinfo4"
+        android:layout_below="@+id/subinfo5"
         android:id="@+id/description"
+        android:inputType="textMultiLine"
         android:hint="Enter a brief discription about the product"
         />
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:cardBackgroundColor="#8c8a8a"
-        android:layout_below="@+id/description"
-        android:id="@+id/ContactDetails"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Contact Details"
-                android:textSize="25dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/ContactDetails"
-        android:id="@+id/Ownername"
-        android:hint="Name"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/Ownername"
-        android:id="@+id/Owneremail"
-        android:hint="email"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/Owneremail"
-        android:id="@+id/Ownerphone"
-        android:hint="Mobile"
-        android:inputType="phone"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_below="@+id/Ownerphone"
-        android:id="@+id/Address"
-        android:hint="Address"
-        />
-
-    <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@+id/Address"
-        android:id="@+id/City"
-        android:hint="sub Information 4"
-        />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="Post Advertisement"
-        android:layout_below="@+id/City"/>
+        android:text="Continue to location specification"
+        android:layout_below="@+id/description"/>
 </RelativeLayout>
 </ScrollView>
