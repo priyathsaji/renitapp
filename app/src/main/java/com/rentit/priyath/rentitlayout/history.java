@@ -35,6 +35,7 @@ public class history extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.History);
     }
 
     @Override
@@ -83,6 +84,8 @@ public class history extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
+            Intent intent = new Intent(this,PostAdActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.Wishlist) {
             Intent intent = new Intent(this,wishlist.class);
@@ -90,6 +93,7 @@ public class history extends AppCompatActivity
 
         } else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
+            intent.putExtra("flag",2);
             startActivity(intent);
 
         } else if (id == R.id.History) {

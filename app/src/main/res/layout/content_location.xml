@@ -24,4 +24,10 @@
         android:layout_height="wrap_content"
         tools:context="com.rentit.priyath.rentitlayout.location"
         />
+    <Button android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Select Location"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/LoctionSelectButton"
+        />
 </RelativeLayout>

@@ -182,6 +182,7 @@
         android:layout_height="60dp"
         android:layout_below="@+id/title"
         android:id="@+id/subinfo1"
+        android:inputType="number"
         android:hint="Rent"
         />
     <EditText
@@ -189,41 +190,34 @@
         android:layout_height="60dp"
         android:layout_below="@+id/subinfo1"
         android:id="@+id/subinfo2"
-        android:hint="Location"
+        android:hint="Area along with unit"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/subinfo2"
         android:id="@+id/subinfo3"
-        android:hint="Area"
+        android:hint="Number of Bedrooms"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@+id/subinfo3"
         android:id="@+id/subinfo4"
-        android:hint="Bedrooms"
+        android:hint="Number of Bathrooms"
         />
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/subinfo4"
         android:id="@+id/subinfo5"
-        android:hint="Bathrooms"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/subinfo5"
-        android:id="@+id/description"
-        android:inputType="textMultiLine"
-        android:hint="Enter a brief discription about the product"
+        android:hint="Enter a brief description about the product.."
         />
     <Button
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:id="@+id/locationSpecification"
         android:text="Continue to location specification"
-        android:layout_below="@+id/description"/>
+        android:layout_below="@+id/subinfo5"/>
 </RelativeLayout>
 </ScrollView>

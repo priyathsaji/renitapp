@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.home);
 
 
         // To change the username and profile photo field in nav drawer
@@ -131,32 +132,27 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.MyAds) {
             Intent intent = new Intent(this,myAds.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
             Intent intent = new Intent(this,PostAdActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.Wishlist) {
             Intent intent = new Intent(this,wishlist.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         } else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("flag",2);
             startActivity(intent);
 
         } else if (id == R.id.History) {
             Intent intent =  new Intent(this,history.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         }else if (id == R.id.chat) {
             Intent intent =  new Intent(this,chatActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
         }

@@ -18,16 +18,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 /*TODO
@@ -44,8 +53,8 @@ public class PostAdActivity extends AppCompatActivity
     EditText subinfo3;
     EditText subinfo4;
     EditText subinfo5;
-    EditText description;
     EditText title;
+
     ImageButton AdImage1;
     ImageButton AdImage2;
     ImageButton AdImage3;
@@ -58,10 +67,15 @@ public class PostAdActivity extends AppCompatActivity
     ProgressBar progressBar4;
     ProgressBar progressBar5;
 
+    Button button;
+
+    ArrayList<String> imageNames;
+
     private int PICK_IMAGE_REQUEST = 1;
 
     int count =0;
-
+    int type = 0;
+    SimpleDateFormat sdf;
     String url= "http://rentitapi.herokuapp.com/ad_image";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +92,9 @@ public class PostAdActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.postAds);
 
-
+        imageNames = new ArrayList<>();
         AdImage1 = (ImageButton)findViewById(R.id.AdImage1);
         AdImage2 = (ImageButton)findViewById(R.id.AdImage2);
         AdImage3 = (ImageButton)findViewById(R.id.AdImage3);
@@ -92,7 +107,6 @@ public class PostAdActivity extends AppCompatActivity
         subinfo3 = (EditText)findViewById(R.id.subinfo3);
         subinfo4 = (EditText)findViewById(R.id.subinfo4);
         subinfo5 = (EditText)findViewById(R.id.subinfo5);
-        description = (EditText)findViewById(R.id.description);
         title = (EditText)findViewById(R.id.title);
 
         progressBar1= (ProgressBar)findViewById(R.id.progressBar1);
@@ -101,46 +115,48 @@ public class PostAdActivity extends AppCompatActivity
         progressBar4= (ProgressBar)findViewById(R.id.progressBar4);
         progressBar5= (ProgressBar)findViewById(R.id.progressBar5);
 
+        sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         Spinner categorySpinner = (Spinner)findViewById(R.id.categorySpinner);
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                type = position;
                 if(position == 0){//House
-                    subinfo3.setHint("Area");
-                    subinfo4.setHint("Bedrooms");
-                    subinfo5.setHint("Bathrooms");
+                    subinfo2.setHint("Area with units");
+                    subinfo3.setHint("Bedrooms");
+                    subinfo4.setHint("Bathrooms");
                 }else if(position == 1){//car
-                    subinfo3.setHint("Brand");
-                    subinfo4.setHint("Model");
-                    subinfo5.setHint("Year of Manufacture");
+                    subinfo2.setHint("Brand");
+                    subinfo3.setHint("Model");
+                    subinfo4.setHint("Year of Manufacture");
                 }else if(position == 2){//heavy
-                    subinfo3.setHint("Number of seats");
-                    subinfo4.setHint("Number of wheels");
-                    subinfo5.setHint("Year of Manufacture");
+                    subinfo2.setHint("Number of seats");
+                    subinfo3.setHint("Number of wheels");
+                    subinfo4.setHint("Year of Manufacture");
                 }else if(position == 3){//Bikes
-                    subinfo3.setHint("Brand");
-                    subinfo4.setHint("Model");
-                    subinfo5.setHint("Year of Manufacture");
+                    subinfo2.setHint("Brand");
+                    subinfo3.setHint("Model");
+                    subinfo4.setHint("Year of Manufacture");
                 }else if(position == 4){//commercials
-                    subinfo3.setHint("Area");
-                    subinfo4.setHint("Parking Capacity");
-                    subinfo5.setHint("Year of Construction");
+                    subinfo2.setHint("Area with unit");
+                    subinfo3.setHint("Parking Capacity");
+                    subinfo4.setHint("Year of Construction");
                 }else if(position == 5){//auditoriums
-                    subinfo3.setHint("Seating Capacity");
-                    subinfo4.setHint("Parking Capacity");
-                    subinfo5.setHint("Area");
+                    subinfo2.setHint("Seating Capacity");
+                    subinfo3.setHint("Parking Capacity");
+                    subinfo4.setHint("Area");
                 }else if(position == 6){//sound
-                    subinfo3.setHint("Number of speakers");
-                    subinfo4.setHint("Power Specification");
-                    subinfo5.setVisibility(View.INVISIBLE);
-                }else if(position == 7){
-                    subinfo3.setHint("Type");
-                    subinfo4.setHint("Power Specification");
-                    subinfo5.setVisibility(View.INVISIBLE);
-                }else if(position == 8){
-                    subinfo3.setHint("Type");
+                    subinfo2.setHint("Number of speakers");
+                    subinfo3.setHint("Power Specification");
                     subinfo4.setVisibility(View.INVISIBLE);
-                    subinfo5.setVisibility(View.INVISIBLE);
+                }else if(position == 7){
+                    subinfo2.setHint("Type");
+                    subinfo3.setHint("Power Specification");
+                    subinfo4.setVisibility(View.INVISIBLE);
+                }else if(position == 8){
+                    subinfo2.setHint("Type");
+                    subinfo3.setVisibility(View.INVISIBLE);
+                    subinfo4.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -201,8 +217,82 @@ public class PostAdActivity extends AppCompatActivity
                 startActivityForResult(Intent.createChooser(intent,"Select picture"),5);
             }
         });
+
+
+        button = (Button)findViewById(R.id.locationSpecification);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkdataEntered()){
+                    Intent intent = new Intent(PostAdActivity.this,location.class);
+                    intent.putExtra("flag",1);
+                    intent.putExtra("Title",title.getText().toString());
+                    intent.putExtra("Rent",Integer.parseInt(subinfo1.getText().toString()));
+                    intent.putExtra("Description",subinfo5.getText().toString());
+                    intent.putExtra("subitem1",subinfo2.getText().toString());
+                    intent.putExtra("subitem2",subinfo3.getText().toString());
+                    intent.putExtra("subitem3",subinfo4.getText().toString());
+                    intent.putExtra("Type",type);
+                    intent.putExtra("image_1",imageNames.get(0));
+                    intent.putExtra("image_2",imageNames.get(1));
+                    intent.putExtra("image_3",imageNames.get(2));
+                    intent.putExtra("image_4",imageNames.get(3));
+                    intent.putExtra("image_5",imageNames.get(4));
+                    intent.putExtra("AverageRating",0);
+                    intent.putExtra("OwnerDetails","fdfafadfdafasdf");
+
+
+
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(PostAdActivity.this, "Enter all the details and try again", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
     }
 
+    private void saveDataEntered() throws JSONException, IOException {
+        JSONObject postData = new JSONObject();
+        postData.put("Title",title.getText().toString());
+        postData.put("Rent",subinfo1.getText());
+        postData.put("subitem1",subinfo2.getText());
+        postData.put("subitem2",subinfo3.getText());
+        postData.put("subitem2",subinfo4.getText());
+        postData.put("Description",subinfo5.getText());
+        //postData.put("image_1",imageNames.get(0));
+        //postData.put("image_2",imageNames.get(1));
+        //postData.put("image_3",imageNames.get(2));
+        //postData.put("image_4",imageNames.get(3));
+        //postData.put("image_5",imageNames.get(4));
+        postData.put("type",type);
+        ;
+        //FileOutputStream out = this.openFileOutput("postData",MODE_PRIVATE);
+        //ObjectOutputStream oos = new ObjectOutputStream(out);
+        //oos.writeObject(ad);
+        //oos.close();
+        //out.close();
+    }
+
+    public boolean checkdataEntered(){
+        if(title.getText().length()==0)
+            return false;
+        if(subinfo1.getText().length()==0)
+            return false;
+        if(subinfo2.getText().length()==0)
+            return false;
+        if(subinfo3.getText().length()==0)
+            return false;
+        if(type < 6) {
+            if (subinfo4.getText().length() == 0)
+                return false;
+            if (subinfo5.getText().length() == 0)
+                return false;
+
+        }
+        return true;
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -255,6 +345,7 @@ public class PostAdActivity extends AppCompatActivity
 
         } else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
+            intent.putExtra("flag",2);
             startActivity(intent);
 
         } else if (id == R.id.History) {
@@ -318,13 +409,15 @@ public class PostAdActivity extends AppCompatActivity
         @Override
         protected Integer doInBackground(Integer... params) {
             Bitmap b = bitmap[params[0]-1];
+            String imagename = "priyathsaji"+sdf.format(new Date())+".png";
+            imageNames.add(imagename);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             b.compress(Bitmap.CompressFormat.PNG, 0, baos);
 
             try {
                 com.rentit.priyath.rentitlayout.HttpClient client = new com.rentit.priyath.rentitlayout.HttpClient(url);
                 client.connectForMultipart();
-                client.addFilePart("file", "priyath.png", baos.toByteArray());
+                client.addFilePart("file",imagename, baos.toByteArray());
                 client.finishMultipart();
                 String data = client.getResponse();
             } catch (Throwable t) {

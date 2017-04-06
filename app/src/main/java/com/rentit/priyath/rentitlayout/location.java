@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,8 +22,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Date;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -41,6 +48,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class location extends FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -48,11 +58,15 @@ public class location extends FragmentActivity
         LocationListener, PlaceSelectionListener
         {
 
-    private GoogleMap mMap;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
-    LocationRequest mLocationRequest;
+            private GoogleMap mMap;
+            GoogleApiClient mGoogleApiClient;
+            Location mLastLocation;
+            Marker mCurrLocationMarker;
+            LocationRequest mLocationRequest;
+            LatLng latlng;
+            Button button;
+            int flag;
+            JSONObject postData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +85,10 @@ public class location extends FragmentActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.location);
+
+        postData = new JSONObject();
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -81,12 +99,78 @@ public class location extends FragmentActivity
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
         autocompleteFragment.setHint("Search a Location");
+        button = (Button)findViewById(R.id.LoctionSelectButton);
+        Intent intent = getIntent();
+        flag = intent.getIntExtra("flag",2);
+        if(flag == 1){
+            button.setText("Post Ad");
+            try {
+                postData.put("Title",intent.getStringExtra("Title"));
+                postData.put("Rent",intent.getIntExtra("Rent",0));
+                postData.put("Description",intent.getStringExtra("Description"));
+                postData.put("subitem1",intent.getStringExtra("subitem1"));
+                postData.put("subitem2",intent.getStringExtra("subitem2"));
+                postData.put("subitem3",intent.getStringExtra("subitem3"));
+                postData.put("type",intent.getIntExtra("Type",0));
+                postData.put("image_1",intent.getStringExtra("image_1"));
+                postData.put("image_2",intent.getStringExtra("image_2"));
+                postData.put("image_3",intent.getStringExtra("image_3"));
+                postData.put("image_4",intent.getStringExtra("image_4"));
+                postData.put("image_5",intent.getStringExtra("image_5"));
+                postData.put("AverageRating",intent.getIntExtra("AverageRating",0));
+                postData.put("ownerDetails",intent.getStringExtra("OwnerDetails"));
+                postData.put("Status","available");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
 
+            Toast.makeText(this,"from postad Activity" + intent.getStringExtra("Title"),Toast.LENGTH_LONG).show();
+        }
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                placeFinder finder = new placeFinder();
+                String location = null;
+                try {
+                    location = finder.getLocality(latlng,getApplicationContext());
+                    location+=" , ";
+                    location+=finder.getFeatureName(latlng,getApplicationContext());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(flag == 1){
+                    try {
+                        postData.put("Location",location);
+                        postData.put("longitude",latlng.longitude);
+                        postData.put("latitude",latlng.latitude);
+                        new postAsyncTask().execute(0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Toast.makeText(getApplicationContext(),"the latlng is :"+ location,Toast.LENGTH_LONG).show();
+
+            }
+        });
 
 
     }
 
+    private class postAsyncTask extends AsyncTask<Integer,Void,String>{
+        @Override
+        protected String doInBackground(Integer... params) {
+            HttpPost httpPost = new HttpPost();
+            String response = httpPost.postData(postData,"https://rentitapi.herokuapp.com/new_product");
+            return response;
+        }
+        protected void onPostExecute(String response){
+            Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(location.this,myAds.class);
+            startActivity(intent);
+        }
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -133,6 +217,8 @@ public class location extends FragmentActivity
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
+            Intent intent = new Intent(this,PostAdActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.Wishlist) {
             Intent intent = new Intent(this,wishlist.class);
@@ -222,6 +308,7 @@ public class location extends FragmentActivity
                         markerOptions.title("Current Position");
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         mCurrLocationMarker = mMap.addMarker(markerOptions);
+                        latlng = latLng;
                     }
                 });
                 //Place current location marker
@@ -232,6 +319,7 @@ public class location extends FragmentActivity
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 mCurrLocationMarker = mMap.addMarker(markerOptions);
 
+                latlng = latLng;
                 //move map camera
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
@@ -325,6 +413,7 @@ public class location extends FragmentActivity
                 mCurrLocationMarker = mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                latlng = place.getLatLng();
             }
 
             @Override
