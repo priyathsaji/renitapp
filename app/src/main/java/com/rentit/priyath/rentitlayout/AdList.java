@@ -49,16 +49,38 @@ public class AdList extends AppCompatActivity
     TextView budgetrange;
     int HouseBudgetmultipler = 5000;
     int max,min;
-    int urlnumber;
+    int type;
     Context context;
-    String urlarray[] = {"http://rentitapi.herokuapp.com/get_houses","http://rentitapi.herokuapp.com/get_cars","http://rentitapi.herokuapp.com/get_bikes",};
-    String url = urlarray[0];
+    String loc;
+    Double latitude;
+    Double longitude;
+    TextView location;
+
+    String url = "http://rentitapi.herokuapp.com/get_products";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adlist);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        loc = intent.getStringExtra("Location");
+        latitude = intent.getDoubleExtra("Latitude",0);
+        longitude = intent.getDoubleExtra("Longitude",0);
+        type = intent.getIntExtra("type",0);
+
+        location = (TextView)findViewById(R.id.loca);
+        location.setText(loc);
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),location.class);
+                intent.putExtra("flag",2);
+                startActivity(intent);
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -68,14 +90,6 @@ public class AdList extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        Intent intent = getIntent();
-        urlnumber = intent.getIntExtra("url number",0);
-        if(urlnumber<3)
-            url = urlarray[urlnumber];
-        else {
-            url = urlarray[0];
-            urlnumber = 0;
-        }
 
         recyclerView = (RecyclerView) findViewById(R.id.AdRecyclerView);
         layoutManager = new LinearLayoutManager(this);
@@ -134,7 +148,7 @@ public class AdList extends AppCompatActivity
 
             @Override
             public int geturlnumber() {
-                return urlnumber;
+                return type;
             }
         };
         recyclerView.setAdapter(adlistadapter);
@@ -169,7 +183,12 @@ public class AdList extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
+            startActivity(intent);
+
         }
     }
 
@@ -256,21 +275,12 @@ public class AdList extends AppCompatActivity
         }
 
         void postData(int page,int urlnumber) throws IOException {
-            String link = url+"?page="+page+"&max="+max+"&min="+min;
-            URL url = new URL(link);
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-            connection.setRequestMethod("GET");
-
-            InputStream in = new BufferedInputStream(connection.getInputStream());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while((line = reader.readLine())!=null){
-                response.append(line);
-
-            }
+            String link = url+"?page="+page+"&max="+max+"&min="+min+"&type="+type;
+            HttpGet httpGet = new HttpGet();
+            String response=httpGet.getData(link);
+            Log.i("response",response);
             try {
-                JSONObject jsonObject = new JSONObject(response.toString());
+                JSONObject jsonObject = new JSONObject(response);
                 TotalPages = jsonObject.getInt("pages");
                 TotalObjects = jsonObject.getInt("total");
                 JSONArray jsonArray = jsonObject.getJSONArray("docs");
@@ -280,11 +290,13 @@ public class AdList extends AppCompatActivity
                 for(int i=0;i<jsonArray.length();i++){
                     gad = new generalAdDetails();
                     js = jsonArray.getJSONObject(i);
-                    gad.Adcost = js.getInt("Price");
+                    gad.Adcost = js.getInt("Rent");
                     gad.adAvgRating = js.getInt("AverageRating");
                     gad.AdTitle = js.getString("Title");
                     gad.primaryImageName = js.getString("image_1");
                     gad.Location = js.getString("Location");
+                    gad.productId=js.getString("_id");
+                    gad.ownerId=js.getString("ownerDetails");
                     AdDetails.add(gad);
                     Log.i("status  :",AdDetails.get(i).Location);
                 }

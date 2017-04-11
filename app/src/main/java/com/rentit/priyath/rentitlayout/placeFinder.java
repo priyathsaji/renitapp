@@ -29,4 +29,10 @@ public class placeFinder {
         List<Address> addresses = geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
         return addresses.get(0).getFeatureName();
     }
+
+    String getLocation(Double latitude,Double longitude, Context context) throws IOException{
+        Geocoder geocoder = new Geocoder(context,Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocation(latitude,longitude,1);
+        return addresses.get(0).getLocality();
+    }
 }

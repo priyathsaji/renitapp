@@ -10,4 +10,6 @@ public class generalAdDetails {
     int Adcost;
     int adAvgRating;
     String primaryImageName;
+    String productId;
+    String ownerId;
 }

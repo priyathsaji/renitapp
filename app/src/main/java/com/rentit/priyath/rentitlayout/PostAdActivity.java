@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,6 +71,9 @@ public class PostAdActivity extends AppCompatActivity
     Button button;
 
     ArrayList<String> imageNames;
+    String loc;
+    Double latitude;
+    Double longitude;
 
     private int PICK_IMAGE_REQUEST = 1;
 
@@ -81,8 +85,14 @@ public class PostAdActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_ad);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        loc = intent.getStringExtra("Location");
+        latitude = intent.getDoubleExtra("Latitude",0);
+        longitude = intent.getDoubleExtra("Longitude",0);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -253,28 +263,6 @@ public class PostAdActivity extends AppCompatActivity
         });
     }
 
-    private void saveDataEntered() throws JSONException, IOException {
-        JSONObject postData = new JSONObject();
-        postData.put("Title",title.getText().toString());
-        postData.put("Rent",subinfo1.getText());
-        postData.put("subitem1",subinfo2.getText());
-        postData.put("subitem2",subinfo3.getText());
-        postData.put("subitem2",subinfo4.getText());
-        postData.put("Description",subinfo5.getText());
-        //postData.put("image_1",imageNames.get(0));
-        //postData.put("image_2",imageNames.get(1));
-        //postData.put("image_3",imageNames.get(2));
-        //postData.put("image_4",imageNames.get(3));
-        //postData.put("image_5",imageNames.get(4));
-        postData.put("type",type);
-        ;
-        //FileOutputStream out = this.openFileOutput("postData",MODE_PRIVATE);
-        //ObjectOutputStream oos = new ObjectOutputStream(out);
-        //oos.writeObject(ad);
-        //oos.close();
-        //out.close();
-    }
-
     public boolean checkdataEntered(){
         if(title.getText().length()==0)
             return false;
@@ -299,7 +287,11 @@ public class PostAdActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
+            startActivity(intent);
         }
     }
 

@@ -20,6 +20,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     GridView grid;
+    TextView location;
+    String loc;
+    Double latitude;
+    Double longitude;
     String[] web = {
             "House",
             "Cars",
@@ -60,6 +64,24 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Intent intent = getIntent();
+        loc = intent.getStringExtra("Location");
+        latitude = intent.getDoubleExtra("Latitude",0);
+        longitude = intent.getDoubleExtra("Longitude",0);
+
+        location = (TextView)findViewById(R.id.loca);
+        location.setText(loc);
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),location.class);
+                intent.putExtra("flag",2);
+                startActivity(intent);
+            }
+        });
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.home);
@@ -87,6 +109,12 @@ public class MainActivity extends AppCompatActivity
         }
     public void startIntent(int position){
         Intent intent = new Intent(getApplicationContext(), AdList.class);
+        intent.putExtra("Latitude",latitude);
+        intent.putExtra("Longitude",longitude);
+        intent.putExtra("Location",loc);
+        intent.putExtra("type",position);
+        startActivity(intent);
+
         startActivity(intent);
     }
 
@@ -132,27 +160,47 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.MyAds) {
             Intent intent = new Intent(this,myAds.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
+            startActivity(intent);
+
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
             Intent intent = new Intent(this,PostAdActivity.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
             startActivity(intent);
 
         } else if (id == R.id.Wishlist) {
             Intent intent = new Intent(this,wishlist.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
             startActivity(intent);
 
         } else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
             intent.putExtra("flag",2);
             startActivity(intent);
 
         } else if (id == R.id.History) {
             Intent intent =  new Intent(this,history.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
             startActivity(intent);
 
         }else if (id == R.id.chat) {
             Intent intent =  new Intent(this,chatActivity.class);
+            intent.putExtra("Latitude",latitude);
+            intent.putExtra("Longitude",longitude);
+            intent.putExtra("Location",loc);
             startActivity(intent);
 
         }

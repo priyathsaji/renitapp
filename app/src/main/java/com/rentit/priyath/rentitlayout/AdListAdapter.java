@@ -30,7 +30,7 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     Context context;
     String image[]={"logo.jpg","car.jpg","bike.jpg","bike.jpg"};
     int imagenumber = 0;
-    int TitleImageArray[]={R.drawable.housegeneral,R.drawable.cargeneral,R.drawable.bikegeneral,R.drawable.bikegeneral};
+    int TitleImageArray[]={R.drawable.housegeneral,R.drawable.cargeneral,R.drawable.bikegeneral,R.drawable.bikegeneral,R.drawable.bikegeneral,R.drawable.bikegeneral,R.drawable.bikegeneral,R.drawable.bikegeneral,R.drawable.bikegeneral};
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
     private static int leftPin =0;
@@ -62,12 +62,14 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         RangeBar rangeBar;
         TextView BudgetRange;
         ImageView generalImage;
+        Button applyButton;
         public viewHolder2(View itemView) {
             super(itemView);
             BudgetView = (TextView)itemView.findViewById(R.id.budgettview);
             BudgetRange = (TextView)itemView.findViewById(R.id.budgetrange);
             rangeBar = (RangeBar)itemView.findViewById(R.id.rangebar);
             generalImage = (ImageView)itemView.findViewById(R.id.listGeneralImage);
+            applyButton = (Button)itemView.findViewById(R.id.applyButton);
         }
     }
 
@@ -109,25 +111,25 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder.rentCost.setText(s);
             viewHolder.AdRating.setRating(gad.adAvgRating);
             Picasso.with(context).load("http://rentitapi.herokuapp.com/"+image[imagenumber]).fit().centerCrop().into(viewHolder.AdImage);
+            //Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+gad.primaryImageName).fit().centerCrop().into(viewHolder.AdImage);
         }else if(holder instanceof viewHolder2){
             if(position == 0){
                 imagenumber = geturlnumber();
             }
-            viewHolder2 viewHolder2 = (viewHolder2)holder;
+            final viewHolder2 viewHolder2 = (viewHolder2)holder;
             viewHolder2.generalImage.setImageResource(TitleImageArray[imagenumber]);
             viewHolder2.rangeBar.setTickStart(0);
             viewHolder2.rangeBar.setTickEnd(30000);
             viewHolder2.rangeBar.setRangePinsByIndices(leftPin,rightPin);
             String s = ""+leftPin*5000+" Rs to "+rightPin*5000+" Rs+";
             viewHolder2.BudgetRange.setText(s);
-            viewHolder2.rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+
+            viewHolder2.applyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
-
-                    leftPin = leftPinIndex;
-                    rightPin = rightPinIndex;
-                    refreshdata(leftPinIndex,rightPinIndex);
-
+                public void onClick(View v) {
+                    leftPin = viewHolder2.rangeBar.getLeftIndex();
+                    rightPin = viewHolder2.rangeBar.getRightIndex();
+                    refreshdata(leftPin,rightPin);
                 }
             });
 

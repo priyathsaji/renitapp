@@ -135,20 +135,28 @@ public class location extends FragmentActivity
                 String location = null;
                 try {
                     location = finder.getLocality(latlng,getApplicationContext());
-                    location+=" , ";
-                    location+=finder.getFeatureName(latlng,getApplicationContext());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 if(flag == 1){
                     try {
+                        location+=" , ";
+                        location+=finder.getFeatureName(latlng,getApplicationContext());
                         postData.put("Location",location);
                         postData.put("longitude",latlng.longitude);
                         postData.put("latitude",latlng.latitude);
                         new postAsyncTask().execute(0);
-                    } catch (JSONException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
+                }if(flag == 2){
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    intent.putExtra("Latitude",latlng.latitude);
+                    intent.putExtra("Longitude",latlng.longitude);
+                    intent.putExtra("Location",location);
+                    startActivity(intent);
+
                 }
                 Toast.makeText(getApplicationContext(),"the latlng is :"+ location,Toast.LENGTH_LONG).show();
 

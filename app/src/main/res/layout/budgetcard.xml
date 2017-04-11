@@ -8,19 +8,34 @@
         android:src="@drawable/housegeneral"
         android:scaleType="centerCrop"
         android:id="@+id/listGeneralImage"/>
-    <com.appyvet.rangebar.RangeBar
-        xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/rangebar"
-        android:layout_below="@+id/listGeneralImage"
-        android:layout_marginTop="30dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        custom:tickStart="0"
-        custom:tickInterval="5000"
-        custom:tickEnd="30000"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listGeneralImage"
+        android:weightSum="10">
+        <com.appyvet.rangebar.RangeBar
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/rangebar"
+
+            android:layout_marginTop="30dp"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            custom:tickStart="0"
+            custom:tickInterval="5000"
+            custom:tickEnd="30000"
+            android:layout_weight="8"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            />
+        <Button
+            android:layout_width="0dp"
+            android:layout_marginTop="45dp"
+            android:layout_height="wrap_content"
+            android:text="Apply"
+            android:id="@+id/applyButton"
+            android:layout_weight="2"/>
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

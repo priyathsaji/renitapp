@@ -1,0 +1,42 @@
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:weightSum="10"
+    android:gravity="right"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:background="@drawable/card2"
+            android:gravity="start"
+            android:minHeight="50dp">
+            <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                android:id="@+id/toname"
+                 android:textColor="#ff0000"
+                 android:text="name"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="35dp" />
+
+             <TextView
+                 android:id="@+id/toMessage"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                android:text="fdf"
+                 android:layout_marginTop="8dp"
+                 android:layout_below="@+id/toname"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginStart="10dp"
+                 android:layout_marginEnd="20dp"
+                 android:textColor="#000"
+                 android:layout_marginBottom="10dp"
+                 android:layout_marginRight="20dp" />
+        </RelativeLayout>
+    </LinearLayout>
