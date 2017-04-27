@@ -21,19 +21,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:id="@+id/locicon"
-                android:src="@drawable/default_image"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:textColor="#ffffff"
-                android:id="@+id/loca"
+                android:id="@+id/productOwner"
                 android:text="User Name "
-                android:layout_marginLeft="35dp"/>
+                />
         </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 

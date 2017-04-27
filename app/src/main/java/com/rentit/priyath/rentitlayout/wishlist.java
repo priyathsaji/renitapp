@@ -33,7 +33,7 @@ public class wishlist extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.Wishlist);
+        //navigationView.setCheckedItem(R.id.Wishlist);
     }
 
     @Override
@@ -85,9 +85,7 @@ public class wishlist extends AppCompatActivity
             Intent intent = new Intent(this,PostAdActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.Wishlist) {
-
-        } else if (id == R.id.location) {
+        }  else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
             intent.putExtra("flag",2);
             startActivity(intent);

@@ -1,9 +1,19 @@
 package com.rentit.priyath.rentitlayout;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +23,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class myAds extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+    ArrayList<generalAdDetails> generalAdDetails;
+    myAdAdapter adapter;
+    Context context;
+    ProgressBar progressbar;
+    int flag;
+    TextView location;
+    globalData globaldata;
+    TextView username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +57,8 @@ public class myAds extends AppCompatActivity
         setContentView(R.layout.activity_my_ads);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        context = this;
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -34,6 +70,54 @@ public class myAds extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.MyAds);
+
+        globaldata = (globalData)getApplicationContext();
+        location = (TextView)findViewById(R.id.loca);
+        location.setText(globaldata.getLocation());
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),location.class);
+                intent.putExtra("flag",2);
+                startActivity(intent);
+            }
+        });
+
+        View header = navigationView.getHeaderView(0);
+        username = (TextView)header.findViewById(R.id.username);
+        username.setText(globaldata.getUsername());
+        Intent intent = getIntent();
+        flag = intent.getIntExtra("flag",0);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.botNav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFragment = null;
+                switch (item.getItemId()) {
+                    case R.id.navbot_item1:
+                        selectedFragment =myAdFragment.newInstance(globaldata.getUserId(),1);
+                        break;
+                    case R.id.navbot_item2:
+                        selectedFragment = proposalFragment.newInstance(null,null);
+                        break;
+                }
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.myadframe, selectedFragment);
+                transaction.commit();
+                return true;
+            }
+        });
+        if(flag == 0) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.myadframe, myAdFragment.newInstance(null, 1));
+            transaction.commit();
+        }else{
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.myadframe, proposalFragment.newInstance(null, null));
+            transaction.commit();
+        }
     }
 
     @Override
@@ -52,6 +136,8 @@ public class myAds extends AppCompatActivity
         getMenuInflater().inflate(R.menu.my_ads, menu);
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -85,11 +171,7 @@ public class myAds extends AppCompatActivity
             Intent intent = new Intent(this,PostAdActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
-            startActivity(intent);
-
-        } else if (id == R.id.location) {
+        }  else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
             intent.putExtra("flag",2);
             startActivity(intent);
@@ -108,4 +190,5 @@ public class myAds extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

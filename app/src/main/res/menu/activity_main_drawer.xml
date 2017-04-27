@@ -26,23 +26,8 @@
             android:id="@+id/History"
             android:icon="@drawable/history"
             android:title="My History" />
-        <item
-            android:id="@+id/Wishlist"
-            android:icon="@drawable/wishlist"
-            android:title="Wishlist" />
+
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/rat"
-                android:title="Rate app" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/contactus"
-                android:title="Contact us" />
-        </menu>
-    </item>
 
 </menu>

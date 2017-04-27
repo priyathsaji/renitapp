@@ -1,12 +1,15 @@
 package com.rentit.priyath.rentitlayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -55,8 +58,12 @@ public class AdList extends AppCompatActivity
     Double latitude;
     Double longitude;
     TextView location;
+    JSONObject postData;
 
-    String url = "http://rentitapi.herokuapp.com/get_products";
+    String url = "http://192.168.43.87:5000/get_products";
+    String proposalLink;
+    globalData globaldata;
+    TextView username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +73,13 @@ public class AdList extends AppCompatActivity
 
         Intent intent = getIntent();
         loc = intent.getStringExtra("Location");
-        latitude = intent.getDoubleExtra("Latitude",0);
-        longitude = intent.getDoubleExtra("Longitude",0);
         type = intent.getIntExtra("type",0);
 
+        globaldata = (globalData)getApplicationContext();
         location = (TextView)findViewById(R.id.loca);
-        location.setText(loc);
+        location.setText(globaldata.getLocation());
+        latitude = globaldata.getLatitude();
+        longitude =globaldata.getLongitude();
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +96,9 @@ public class AdList extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        username = (TextView)header.findViewById(R.id.username);
+        username.setText(globaldata.getUsername());
 
 
 
@@ -130,6 +141,13 @@ public class AdList extends AppCompatActivity
 
         adlistadapter = new AdListAdapter(AdDetails, context) {
             @Override
+            public void startChat(String toId) {
+                Intent intent = new Intent(AdList.this,chatInterface.class);
+                intent.putExtra("fromId",toId);
+                intent.putExtra("toId",globaldata.getUserId());
+                startActivity(intent);
+            }
+            @Override
             public void refreshdata(int left, int right) {
                 int temp1 = right*HouseBudgetmultipler;
                 int temp2 = left*HouseBudgetmultipler;
@@ -150,26 +168,48 @@ public class AdList extends AppCompatActivity
             public int geturlnumber() {
                 return type;
             }
+
+            @Override
+            public void proposal(generalAdDetails data) {
+
+                proposalLink = "http://192.168.43.87:5000/new_proposal?name="+globaldata.getUsername()+"&productName="+data.AdTitle+"&phoneNumber="+globaldata.getphonenumber()+"&rent="+data.Adcost+"&fromId="+globaldata.getUserId()+"&toId="+data.ownerId+"&productId="+data.productId+"&type="+data.type+"&image="+data.primaryImageName;
+                proposalAsyncTask proposaltask = new proposalAsyncTask();
+                proposaltask.execute(1);
+            }
         };
         recyclerView.setAdapter(adlistadapter);
 
 
         new MyAsyncTask().execute(1);
 
-        /*rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
-            @Override
-            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
-                String budget = ""+(leftPinIndex*5000)+" Rs to "+(rightPinIndex*5000)+" Rs+";
 
-                max = rightPinIndex*HouseBudgetmultipler;
-                min = leftPinIndex*HouseBudgetmultipler;
-                budgetrange.setText(budget);
-                AdDetails.clear();
-                new MyAsyncTask().execute(1);
+    }
+
+
+
+    public class proposalAsyncTask extends AsyncTask<Integer,Void,String>{
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            HttpGet httpGet = new HttpGet();
+            try {
+                String response = httpGet.getData(proposalLink);
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
-*/
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Toast.makeText(getApplicationContext(),"New Proposal Submitted",Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(getApplicationContext(),history.class);
+            startActivity(intent);
+        }
     }
 
     void startIntent(){
@@ -228,9 +268,7 @@ public class AdList extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
-
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
+            Intent intent = new Intent(this,PostAdActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.location) {
@@ -275,7 +313,7 @@ public class AdList extends AppCompatActivity
         }
 
         void postData(int page,int urlnumber) throws IOException {
-            String link = url+"?page="+page+"&max="+max+"&min="+min+"&type="+type;
+            String link = url+"?page="+page+"&max="+max+"&min="+min+"&type="+type+"&latitude="+latitude+"&longitude="+longitude;
             HttpGet httpGet = new HttpGet();
             String response=httpGet.getData(link);
             Log.i("response",response);
@@ -296,6 +334,7 @@ public class AdList extends AppCompatActivity
                     gad.primaryImageName = js.getString("image_1");
                     gad.Location = js.getString("Location");
                     gad.productId=js.getString("_id");
+                    gad.type=js.getInt("type");
                     gad.ownerId=js.getString("ownerDetails");
                     AdDetails.add(gad);
                     Log.i("status  :",AdDetails.get(i).Location);
@@ -325,6 +364,9 @@ public class AdList extends AppCompatActivity
 
             Toast.makeText(context,"page :"+page,Toast.LENGTH_LONG).show();
         }
+
+
+
     }
 
 

@@ -34,12 +34,6 @@
                 android:id="@+id/loca"
                 android:text="Location"
                 android:layout_marginLeft="35dp"/>
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:foregroundGravity="right"
-                android:src="@drawable/chatwhite"/>
         </RelativeLayout></android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

@@ -4,72 +4,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:layout_height="match_parent">
 <RelativeLayout
     android:id="@+id/content_details1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingTop="25dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.rentit.priyath.rentitlayout.Details1"
     tools:showIn="@layout/app_bar_details1">
 
 
-    <HorizontalScrollView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/horizontalscrollview">
-       <LinearLayout
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content">
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/default_image"
-               android:layout_marginEnd="5dp"
-               android:layout_marginRight="5dp" />
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/default_image" />
-           <ImageView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:src="@drawable/default_image" />
-       </LinearLayout>
-    </HorizontalScrollView>
+        android:layout_height="200dp"
+        android:src="@drawable/default_image"
+        android:id="@+id/primaryImage"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/horizontalscrollview"
+        android:layout_below="@+id/primaryImage"
         android:text="Title of product"
         android:textStyle="bold"
         android:textSize="20dp"
-        android:id="@+id/model"
+        android:id="@+id/title"
         android:layout_marginTop="15dp"
         />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add to wishlist"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/horizontalscrollview"
-        android:background="#0048ff"
-        android:textColor="#ffffff"
-        android:layout_alignParentRight="true"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/model"
-        android:text="Sub item 1 : value"
-        android:id="@+id/seats"
+        android:layout_below="@+id/title"
+        android:text="Location"
+        android:id="@+id/location"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_marginTop="15dp"
@@ -77,19 +45,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seats"
-        android:text="Sub Item 2 : value "
+        android:layout_below="@+id/location"
+        android:text="Rent"
         android:id="@+id/Rent"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_marginTop="15dp"
         />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Rent"
-        android:text="Sub Item 3 : Value "
-        android:id="@+id/loc"
+        android:text="sub1 : "
+        android:id="@+id/sub1"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_marginTop="15dp"
@@ -97,45 +66,61 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/loc"
-        android:text="Sub Item 4 : value "
-        android:id="@+id/year"
+        android:layout_below="@+id/sub1"
+        android:text="sub2"
+        android:id="@+id/sub2"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_marginTop="15dp"
         />
-    <android.support.v7.widget.CardView
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sub2"
+        android:text="sub3"
+        android:id="@+id/sub3"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginTop="15dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sub3"
+        android:text="sub4"
+        android:id="@+id/sub4"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginTop="15dp"
+        />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/year"
-        android:layout_marginTop="8dp">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/default_image"
-                android:id="@+id/profilepic"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name of Reviewer"
-                android:layout_toEndOf="@+id/profilepic"
-                android:layout_toRightOf="@+id/profilepic"
-                android:layout_marginTop="18dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/review"
-                android:text="here the reviewer write the review about the car"
-                android:layout_below="@+id/profilepic"/>
-            <RatingBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/review"
-                android:rating="4"/>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/sub4"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/buttonLayout"
+        android:weightSum="2">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/images"
+            android:background="#0048ff"
+            android:textColor="#ffffff"
+            android:text="View images"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/Reviews"
+            android:background="#0048ff"
+            android:textColor="#ffffff"
+            android:text="View Reviews"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
 </RelativeLayout>
 </ScrollView>

@@ -31,25 +31,27 @@ public class MainActivity extends AppCompatActivity
             "Bikes and Scooters",
             "Commercial spaces",
             "Auditoriums and events",
-            "Sound   Systems",
+            "Light and Sound Systems",
             "Tools and Equipments",
             "Miscelloneous items"
 
     } ;
     int[] imageId = {
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
-            R.drawable.default_image,
+            R.drawable.house,
+            R.drawable.car,
+            R.drawable.bus,
+            R.drawable.bike,
+            R.drawable.shop,
+            R.drawable.hall,
+            R.drawable.speaker,
+            R.drawable.tools,
+            R.drawable.misc,
 
 
     };
 
+    globalData globaldata;
+    TextView username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,9 +70,9 @@ public class MainActivity extends AppCompatActivity
         loc = intent.getStringExtra("Location");
         latitude = intent.getDoubleExtra("Latitude",0);
         longitude = intent.getDoubleExtra("Longitude",0);
-
+        globaldata = (globalData)getApplicationContext();
         location = (TextView)findViewById(R.id.loca);
-        location.setText(loc);
+        location.setText(globaldata.getLocation());
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +86,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        username = (TextView)header.findViewById(R.id.username);
+        username.setText(globaldata.getUsername());
         navigationView.setCheckedItem(R.id.home);
 
 
-        // To change the username and profile photo field in nav drawer
-        View hView =  navigationView.getHeaderView(0);
-        TextView nav_user = (TextView)hView.findViewById(R.id.username);
-        nav_user.setText("User Name");
+
 
             CustomGrid adapter = new CustomGrid(MainActivity.this, web, imageId);
             grid=(GridView)findViewById(R.id.grid);
@@ -163,19 +165,13 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("Latitude",latitude);
             intent.putExtra("Longitude",longitude);
             intent.putExtra("Location",loc);
+            intent.putExtra("flag",0);
             startActivity(intent);
 
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
             Intent intent = new Intent(this,PostAdActivity.class);
-            intent.putExtra("Latitude",latitude);
-            intent.putExtra("Longitude",longitude);
-            intent.putExtra("Location",loc);
-            startActivity(intent);
-
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
             intent.putExtra("Latitude",latitude);
             intent.putExtra("Longitude",longitude);
             intent.putExtra("Location",loc);

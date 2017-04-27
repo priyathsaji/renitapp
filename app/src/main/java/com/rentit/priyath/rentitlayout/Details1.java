@@ -1,11 +1,16 @@
 package com.rentit.priyath.rentitlayout;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,17 +22,38 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Details1 extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    HorizontalAdapter horizontalAdapter;
     private ArrayList<Integer> horizontalList;
+    FloatingActionButton fab;
+    int type;
+    String id;
+    TextView title,loc,rent,sub1,sub2,sub3,sub4;
+    ImageView primaryImage;
+    String image1,image2,image3,image4,image5;
+
+    Button viewImages;
+    globalData globaldata;
+    TextView location;
+    String comment;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +63,68 @@ public class Details1 extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        button = (Button)findViewById(R.id.Reviews);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),RatingActivity.class);
+                intent.putExtra("rating",comment);
+                startActivity(intent);
+            }
+        });
+
+        globaldata = (globalData)getApplicationContext();
+        location = (TextView)findViewById(R.id.loca);
+        location.setText(globaldata.getLocation());
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),location.class);
+                intent.putExtra("flag",2);
+                startActivity(intent);
+            }
+        });
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        horizontalList=new ArrayList<>();
+        title = (TextView)findViewById(R.id.title);
+        loc = (TextView)findViewById(R.id.location);
+        rent = (TextView)findViewById(R.id.Rent);
+        sub1 = (TextView)findViewById(R.id.sub1);
+        sub2 = (TextView)findViewById(R.id.sub2);
+        sub3 = (TextView)findViewById(R.id.sub3);
+        sub4 = (TextView)findViewById(R.id.sub4);
+        primaryImage = (ImageView)findViewById(R.id.primaryImage);
+        viewImages = (Button)findViewById(R.id.images);
+        viewImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),imageVIewer.class);
+                intent.putExtra("image1",image1);
+                intent.putExtra("image2",image2);
+                intent.putExtra("image3",image3);
+                intent.putExtra("image4",image4);
+                intent.putExtra("image5",image5);
+                getApplicationContext().startActivity(intent);
+            }
+        });
 
-        horizontalAdapter=new HorizontalAdapter(horizontalList);
+        Intent intent = getIntent();
+        id = intent.getStringExtra("id");
+        type = intent.getIntExtra("type",0);
 
-        //RecyclerView recyclerView = (RecyclerView)findViewById(R.id.horizontal_recycler_View);
-
-        //LinearLayoutManager horizontalLayoutManagaer
-         //       = new LinearLayoutManager(Details1.this, LinearLayoutManager.HORIZONTAL, false);
-       // recyclerView.setLayoutManager(horizontalLayoutManagaer);
+        myAsyncTask t = new myAsyncTask();
+        t.execute(0);
 
 
-       //recyclerView.setAdapter(horizontalAdapter);
     }
 
     @Override
@@ -108,11 +174,7 @@ public class Details1 extends AppCompatActivity
 
         } else if (id == R.id.postAds) {
 
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
-            startActivity(intent);
-
-        } else if (id == R.id.location) {
+        }  else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
             startActivity(intent);
 
@@ -131,47 +193,114 @@ public class Details1 extends AppCompatActivity
         return true;
     }
 
-    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+    public class myAsyncTask extends AsyncTask<Integer,Void,String>{
 
-        private List<Integer> horizontalList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public ImageView imageView;
-
-            public MyViewHolder(View view) {
-                super(view);
-                imageView = (ImageView)findViewById(R.id.adImages);
-
+        @Override
+        protected String doInBackground(Integer... params) {
+            HttpGet httpGet = new HttpGet();
+            String response = null;
+            try {
+                response= httpGet.getData("http://192.168.43.87:5000/purticular_product?type="+type+"&id="+id);
+                Log.i("response",response);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            return  response;
         }
 
-
-        public HorizontalAdapter(List<Integer> horizontalList) {
-            this.horizontalList = horizontalList;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.horizontal_item_view, parent, false);
-
-            return new MyViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
+        protected void onPostExecute(String response){
+            try {
+                JSONObject js = new JSONObject(response);
+                //Picasso.with(getApplicationContext()).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+js.getString("image_1")).fit().centerCrop().into(primaryImage);
+                title.setText(js.getString("Title"));
+                loc.setText(js.getString("Location"));
+                rent.setText("Rent :  "+js.getString("Rent"));
+                image1 = js.getString("image_1");
+                image2 = js.getString("image_2");
+                image3 = js.getString("image_3");
+                image4 = js.getString("image_4");
+                image5 = js.getString("image_5");
+                String temp;
+                if(type == 0){
+                    temp = "Area :  " + js.getString("Area");
+                    sub1.setText(temp);
+                    temp = "Bedrooms :  " + js.getString("Bedrooms");
+                    sub2.setText(temp);
+                    temp = "Bathrooms :  "+ js.getString("Bathrooms");
+                    sub3.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub4.setText(temp);
+                }else if(type == 1){
+                    temp = "Brand :  "+ js.getString("Brand");
+                    sub1.setText(temp);
+                    temp ="Model :  :"+ js.getString("Model");
+                    sub2.setText(temp);
+                    temp ="Year :  "+js.getString("Year");
+                    sub3.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub4.setText(temp);
+                }else if(type == 2){
+                    temp = "Number of Wheels :  "+js.getString("NumberOfWheels");
+                    sub1.setText(temp);
+                    temp = "Number of Simeats :  "+js.getString("NumberOfSeats");
+                    sub2.setText(temp);
+                    temp = "Year :  "+js.getString("Year");
+                    sub3.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub4.setText(temp);
+                }else if(type == 3){
+                    temp = "Brand :  "+ js.getString("Brand");
+                    sub1.setText(temp);
+                    temp = "Model :  :"+ js.getString("Model");
+                    sub2.setText(temp);
+                    temp = "Year :  "+js.getString("Year");
+                    sub3.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub4.setText(temp);
+                }else if(type == 4){
+                    temp = "Area :  "+js.getString("Area");
+                    sub1.setText(temp);
+                    temp = "Parking Capacity  :" +js.getString("ParkingCapacity");
+                    sub2.setText(temp);
+                    temp = "Year :  "+js.getString("Year");
+                    sub3.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub4.setText(temp);
+                }else if(type == 5){
+                    temp = "Seating Capacity :  "+js.getString("SeatingCapacity");
+                    sub1.setText(temp);
+                    temp = "Parking Capacity :  "+js.getString("ParkingCapacity");
+                    sub2.setText(temp);
+                    temp = "Area :  "+js.getString("Area");
+                    sub3.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub4.setText(temp);
+                }else if(type == 6){
+                    temp ="Power :  "+js.getString("powerSpecification");
+                    sub1.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub2.setText(temp);
+                    sub3.setVisibility(View.GONE);
+                    sub4.setVisibility(View.GONE);
+                }else if(type == 7){
+                    temp = "Tool Type :  "+js.getString("toolType");
+                    sub1.setText(temp);
+                    temp = "Power :  "+js.getString("powerSpecification");
+                    sub2.setText(temp);
+                    temp = "Description :  "+ js.getString("Description");
+                    sub3.setText(temp);
+                    sub4.setVisibility(View.GONE);
+                }else if(type == 8){
+                    temp = "Description :  "+ js.getString("Description");
+                    sub1.setText(temp);
+                    sub2.setVisibility(View.GONE);
                 }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return horizontalList.size();
+                JSONArray comments = js.getJSONArray("comments");
+                comment = String.valueOf(comments);
+                Log.i("comments :", String.valueOf(comments));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

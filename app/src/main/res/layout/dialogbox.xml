@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingbar"
+
+        android:numStars="5"
+        />
+    <EditText android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/review"
+
+        android:layout_below="@+id/ratingbar"
+        android:hint="Enter your review here"
+        android:scrollbarAlwaysDrawVerticalTrack="true"/>
+</RelativeLayout>
+

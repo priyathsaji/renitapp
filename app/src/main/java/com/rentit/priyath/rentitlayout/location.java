@@ -23,12 +23,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -68,6 +70,10 @@ public class location extends FragmentActivity
             int flag;
             JSONObject postData;
 
+
+            TextView location;
+            globalData globaldata;
+            TextView username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +92,14 @@ public class location extends FragmentActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.location);
+
+        globaldata = (globalData)getApplicationContext();
+        location = (TextView)findViewById(R.id.loca);
+        location.setText(globaldata.getLocation());
+
+        View header = navigationView.getHeaderView(0);
+        username = (TextView)header.findViewById(R.id.username);
+        username.setText(globaldata.getUsername());
 
         postData = new JSONObject();
 
@@ -118,7 +132,7 @@ public class location extends FragmentActivity
                 postData.put("image_4",intent.getStringExtra("image_4"));
                 postData.put("image_5",intent.getStringExtra("image_5"));
                 postData.put("AverageRating",intent.getIntExtra("AverageRating",0));
-                postData.put("ownerDetails",intent.getStringExtra("OwnerDetails"));
+                postData.put("ownerDetails",globaldata.getUserId());
                 postData.put("Status","available");
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -155,6 +169,9 @@ public class location extends FragmentActivity
                     intent.putExtra("Latitude",latlng.latitude);
                     intent.putExtra("Longitude",latlng.longitude);
                     intent.putExtra("Location",location);
+                    globaldata.addLocation(location);
+                    globaldata.addLatitude(latlng.latitude);
+                    globaldata.addlogitude(latlng.longitude);
                     startActivity(intent);
 
                 }
@@ -170,15 +187,19 @@ public class location extends FragmentActivity
         @Override
         protected String doInBackground(Integer... params) {
             HttpPost httpPost = new HttpPost();
-            String response = httpPost.postData(postData,"https://rentitapi.herokuapp.com/new_product");
+            String response = httpPost.postData(postData,"http://192.168.43.87:5000/new_product");
             return response;
         }
         protected void onPostExecute(String response){
             Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
             Intent intent = new Intent(location.this,myAds.class);
+            intent.putExtra("flag",1);
             startActivity(intent);
         }
     }
+
+
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -228,11 +249,7 @@ public class location extends FragmentActivity
             Intent intent = new Intent(this,PostAdActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
-            startActivity(intent);
-
-        } else if (id == R.id.location) {
+        }  else if (id == R.id.location) {
 
 
         } else if (id == R.id.History) {

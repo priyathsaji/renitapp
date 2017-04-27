@@ -1,10 +1,12 @@
 package com.rentit.priyath.rentitlayout;
 
+import java.io.Serializable;
+
 /**
  * Created by priyath on 25-03-2017.
  */
 
-public class generalAdDetails {
+public class generalAdDetails implements Serializable{
     String Location;
     String AdTitle;
     int Adcost;
@@ -12,4 +14,6 @@ public class generalAdDetails {
     String primaryImageName;
     String productId;
     String ownerId;
+    String status;
+    int type;
 }

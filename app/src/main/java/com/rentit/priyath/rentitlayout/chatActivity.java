@@ -4,9 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,7 +22,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,9 +47,14 @@ public class chatActivity extends AppCompatActivity
     LinearLayoutManager linearLayoutManager;
     chatUser chatUser;
     ArrayList<chatUser> chatUsers;
-    MyReceiver myReceiver;
     chatuseradapter adapter;
     HashMap<String,Integer> chat;
+
+    TextView location;
+    globalData globaldata;
+    TextView username;
+
+    public static final String MESSAGE_RECEIVED = "message_received";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,110 +73,41 @@ public class chatActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.chat);
 
+
+        globaldata = (globalData)getApplicationContext();
+        location = (TextView)findViewById(R.id.loca);
+        location.setText(globaldata.getLocation());
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),location.class);
+                intent.putExtra("flag",2);
+                startActivity(intent);
+            }
+        });
+
+        View header = navigationView.getHeaderView(0);
+        username = (TextView)header.findViewById(R.id.username);
+        username.setText(globaldata.getUsername());
+
         recyclerView = (RecyclerView)findViewById(R.id.Chatusers);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         chatUsers = new ArrayList<>();
-        try {
-            getChatUserData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        HashMap<String,Integer> map = new HashMap<>();
-        map.put("testing",1);
-        try {
-            saveChatUserData(chatUsers);
-            saveChatData(map);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-
-        adapter = new chatuseradapter(chatUsers,this);
-        recyclerView.setAdapter(adapter);
-
-        myReceiver = new MyReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(getChatService.MY_ACTION);
-        registerReceiver(myReceiver, intentFilter);
-        Intent intent = new Intent(this,getChatService.class);
-        startService(intent);
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
-
-
+        globalData globalData = (com.rentit.priyath.rentitlayout.globalData)getApplicationContext();
+        globalData.clear(); // clearing the notification messages from global data
+        registerReceiver();
 
     }
-    void getChatUserData() throws IOException, ClassNotFoundException {
-        FileInputStream in = this.openFileInput("chatusers");
-        ObjectInputStream inputStream = new ObjectInputStream(in);
-        ArrayList<chatUser> chUsers = new ArrayList<>();
 
-        chUsers = (ArrayList<chatUser>) inputStream.readObject();
+    public void onResume(){
+        super.onResume();
         chatUsers.clear();
-        for(int i=0;i<chUsers.size();i++)
-            chatUsers.add(chUsers.get(i));
-        Collections.sort(chatUsers, new UserComparator());
-        in.close();
-        inputStream.close();
-
-    }
-    void saveChatData(HashMap<String,Integer> data) throws IOException {
-        File file = new File(getDir("datamap", MODE_PRIVATE), "map");
-        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
-        outputStream.writeObject(data);
-        outputStream.flush();
-        outputStream.close();
-        Log.i("testing",""+data.get("testing"));
-        //Toast.makeText(this,"the testing is :"+data.get("testing"),Toast.LENGTH_LONG).show();
-    }
-    void saveChatUserData(ArrayList<chatUser> data) throws IOException {
-        FileOutputStream out = this.openFileOutput("chatusers",MODE_PRIVATE);
-        ObjectOutputStream oos = new ObjectOutputStream(out);
-        oos.writeObject(data);
-        oos.close();
-        out.close();
-
-        Toast.makeText(this,"saving Data",Toast.LENGTH_LONG).show();
+        new Request().execute("priyathsaji");
     }
 
-
-    public class MyReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            // TODO Auto-generated method stub
-            Toast.makeText(arg0,"recieved something",Toast.LENGTH_LONG).show();
-            int datapassed = arg1.getIntExtra("DATAPASSED", 0);
-            try {
-                getChatUserData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            adapter.notifyDataSetChanged();
-
-
-        }
-    }
     public class UserComparator implements Comparator<chatUser> {
         @Override
         public int compare(chatUser u1, chatUser u2) {
@@ -184,7 +127,8 @@ public class chatActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -223,11 +167,7 @@ public class chatActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.postAds) {
-            Intent intent = new Intent(this,PostAdActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
+            Intent intent = new Intent(this, PostAdActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.location) {
@@ -246,5 +186,109 @@ public class chatActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void registerReceiver(){
+
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(MESSAGE_RECEIVED);
+        bManager.registerReceiver(broadcastReceiver, intentFilter);
+
+    }
+
+
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(MESSAGE_RECEIVED)) {
+                chatUsers.clear();
+                new Request().execute("priyathsaji");
+            }
+        }
+    };
+
+
+    public class Request extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpGet httpGet = new HttpGet();
+            String response = null;
+            // String link = "https://rentitapi.herokuapp.com/chat_from?toId="+toId+"&fromId"+fromId;
+            String link = "http://192.168.43.87:5000/get_chatusers?toId="+globaldata.getUserId();
+            try {
+                response=httpGet.getData(link);
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if(result.charAt(0)=='['){
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for(int i=0;i<jsonArray.length();i++) {
+                        JSONObject js = jsonArray.getJSONObject(i);
+                        chatUser chatuser  = new chatUser();
+                        chatuser.productName = js.getString("productName");
+                        chatuser.toId = js.getString("toId");
+                        chatuser.fromId = js.getString("fromId");
+                        chatuser.number =js.getInt("number");
+                        chatuser.ownerName = js.getString("name");
+                        chatUsers.add(chatuser);
+                    }
+                    Collections.sort(chatUsers, new UserComparator());
+                    adapter = new chatuseradapter(chatUsers,getApplicationContext());
+                    recyclerView.setAdapter(adapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
+/*
+    void getChatUserData() throws IOException, ClassNotFoundException {
+        FileInputStream in = this.openFileInput("chatusers");
+        ObjectInputStream inputStream = new ObjectInputStream(in);
+        ArrayList<chatUser> chUsers = new ArrayList<>();
+
+        chUsers = (ArrayList<chatUser>) inputStream.readObject();
+        chatUsers.clear();
+        for(int i=0;i<chUsers.size();i++)
+            chatUsers.add(chUsers.get(i));
+        Collections.sort(chatUsers, new UserComparator());
+        in.close();
+        inputStream.close();
+
+    }
+    void saveChatData(HashMap<String,Integer> data) throws IOException {
+        File file = new File(getDir("datamap", MODE_PRIVATE), "map");
+        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
+        outputStream.writeObject(data);
+        outputStream.flush();
+        outputStream.close();
+        Log.i("testing",""+data.get("testing"));
+        //Toast.makeText(this,"the testing is :"+data.get("testing"),Toast.LENGTH_LONG).show();
+    }
+    void saveChatUserData(ArrayList<chatUser> data) throws IOException {
+        FileOutputStream out = this.openFileOutput("chatusers",MODE_PRIVATE);
+        ObjectOutputStream oos = new ObjectOutputStream(out);
+        oos.writeObject(data);
+        oos.close();
+        out.close();
+
+        Toast.makeText(this,"saving Data",Toast.LENGTH_LONG).show();
+    }
+
+    */
 
 }

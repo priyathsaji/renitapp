@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/proposalcard">
+<RelativeLayout
+
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/proposalview"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Product Name : something"
+        android:id="@+id/proposalproductname"
+        android:textSize="20dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/proposalproductname"
+        android:text="Customer Name : someone"
+        android:id="@+id/customername"
+        android:textSize="18dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/customername"
+        android:id="@+id/proposalrent"
+        android:text="Rent : someprice"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone : phonenumber"
+        android:id="@+id/customernumber"
+        android:layout_below="@+id/proposalrent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/adStatus"
+        android:layout_below="@id/customernumber"
+        android:visibility="gone"
+        android:text="Status :"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/adStatus"
+        android:weightSum="3">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="call"
+            android:layout_weight="1"
+            android:id="@+id/call"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="disaprove"
+            android:layout_weight="1"
+            android:id="@+id/disaprove"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="aprove"
+            android:layout_weight="1"
+            android:id="@+id/approve"/>
+
+    </LinearLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

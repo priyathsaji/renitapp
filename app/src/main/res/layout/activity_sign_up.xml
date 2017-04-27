@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="10dp"
+    tools:context="com.rentit.priyath.rentitlayout.SignUp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/etfirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:hint="Name"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/etmiddleName"
+                        android:inputType="textEmailAddress"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:hint="Email ID"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:textSize="18sp"
+                        android:layout_alignParentLeft="true" />
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/linearLayout3"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:layout_alignParentLeft="true" />
+
+                    <EditText
+                        android:id="@+id/etcpassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/etPassword"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000"
+                        android:layout_alignParentLeft="true" />
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/etPassword"
+                        android:layout_weight="1"
+                        android:layout_alignParentLeft="true">
+
+                        <RadioButton
+                            android:id="@+id/maleButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:text="Female"
+                            android:textColor="#000000"
+                            android:textColorHint="#000000"/>
+
+                        <RadioButton
+                            android:id="@+id/femaleButton"
+                            android:layout_width="89dp"
+                            android:layout_height="wrap_content"
+                            android:text="Male"
+                            android:textColor="#000000"
+                            android:textColorHint="#000000" />
+
+                    </RadioGroup>
+
+                    <EditText
+                        android:id="@+id/phoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/linearLayout2"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="Mobile Number"
+                        android:inputType="phone"
+                        android:maxLength="10"
+                        android:textColor="#000000"
+                        android:textColorHint="#000000" />
+
+                    <Button
+                        android:id="@+id/signupButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_weight="1"
+                        android:text="SIGN UP!"
+                        android:background="#1882ad"
+                        android:textColor="@android:color/background_light"
+                        android:textSize="18sp"
+                        android:layout_alignParentLeft="true" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+</RelativeLayout>
+
+
+
+
+
+

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "762704509331",
+    "firebase_url": "https://rentit-1490960036244.firebaseio.com",
+    "project_id": "rentit-1490960036244",
+    "storage_bucket": "rentit-1490960036244.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:762704509331:android:2c3f03c95cdd9138",
+        "android_client_info": {
+          "package_name": "com.rentit.priyath.rentitlayout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "762704509331-d69kjsoarq89n9nneoi0b716juc915hu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFTgRQ0jbng8hPHDXmmAv1YobZA-y9_MY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

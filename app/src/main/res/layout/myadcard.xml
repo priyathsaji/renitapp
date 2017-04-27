@@ -1,0 +1,67 @@
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_below="@+id/rangebar"
+    android:id="@+id/card1"
+    app:cardCornerRadius="10dp"
+    android:layout_marginTop="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Remove Ad"
+            android:visibility="gone"
+            android:id="@+id/removeadd"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150sp"
+            android:src="@drawable/default_image"
+            android:id="@+id/AdImage"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AdImage"
+            android:id="@+id/AdTitle"
+            android:textSize="20dp"
+            android:gravity="center_horizontal"
+            android:text="Item Title" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/AdTitle"
+            android:id="@+id/location"
+            android:text="Location of Item"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/location"
+            android:layout_alignParentRight="true"
+            android:text="Rent in Rs"
+            android:id="@+id/AdRent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/location"
+            android:text="status(Rented/To Rent)"
+            android:id="@+id/status"/>
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/status"
+            android:rating="3"
+            android:id="@+id/rating"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/status"
+            android:layout_alignParentRight="true"
+            android:id="@+id/editAd"
+            android:text="Remove Ad"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -1,5 +1,6 @@
 package com.rentit.priyath.rentitlayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -74,13 +78,17 @@ public class PostAdActivity extends AppCompatActivity
     String loc;
     Double latitude;
     Double longitude;
+    TextView username;
 
     private int PICK_IMAGE_REQUEST = 1;
 
     int count =0;
     int type = 0;
     SimpleDateFormat sdf;
-    String url= "http://rentitapi.herokuapp.com/ad_image";
+    String url= "http://192.168.43.87:5000/ad_image";
+
+    globalData globaldata;
+    String imagestart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +101,13 @@ public class PostAdActivity extends AppCompatActivity
         loc = intent.getStringExtra("Location");
         latitude = intent.getDoubleExtra("Latitude",0);
         longitude = intent.getDoubleExtra("Longitude",0);
+        globaldata = (globalData)getApplicationContext();
+        String email = globaldata.getEmailId();
+        int endindex =3;
+        for(int i = 0;i<email.length();i++)
+        if(email.charAt(i) == '@'){  endindex = i; break;}
+
+        imagestart = email.substring(0,endindex);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -103,6 +118,9 @@ public class PostAdActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.postAds);
+        View header = navigationView.getHeaderView(0);
+        username = (TextView)header.findViewById(R.id.username);
+        username.setText(globaldata.getUsername());
 
         imageNames = new ArrayList<>();
         AdImage1 = (ImageButton)findViewById(R.id.AdImage1);
@@ -234,26 +252,26 @@ public class PostAdActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if(checkdataEntered()){
-                    Intent intent = new Intent(PostAdActivity.this,location.class);
-                    intent.putExtra("flag",1);
-                    intent.putExtra("Title",title.getText().toString());
-                    intent.putExtra("Rent",Integer.parseInt(subinfo1.getText().toString()));
-                    intent.putExtra("Description",subinfo5.getText().toString());
-                    intent.putExtra("subitem1",subinfo2.getText().toString());
-                    intent.putExtra("subitem2",subinfo3.getText().toString());
-                    intent.putExtra("subitem3",subinfo4.getText().toString());
-                    intent.putExtra("Type",type);
-                    intent.putExtra("image_1",imageNames.get(0));
-                    intent.putExtra("image_2",imageNames.get(1));
-                    intent.putExtra("image_3",imageNames.get(2));
-                    intent.putExtra("image_4",imageNames.get(3));
-                    intent.putExtra("image_5",imageNames.get(4));
-                    intent.putExtra("AverageRating",0);
-                    intent.putExtra("OwnerDetails","fdfafadfdafasdf");
+
+                        Intent intent = new Intent(PostAdActivity.this,location.class);
+                        intent.putExtra("flag",1);
+                        intent.putExtra("Title",title.getText().toString());
+                        intent.putExtra("Rent",Integer.parseInt(subinfo1.getText().toString()));
+                        intent.putExtra("Description",subinfo5.getText().toString());
+                        intent.putExtra("subitem1",subinfo2.getText().toString());
+                        intent.putExtra("subitem2",subinfo3.getText().toString());
+                        intent.putExtra("subitem3",subinfo4.getText().toString());
+                        intent.putExtra("Type",type);
+                        intent.putExtra("image_1", imageNames.get(0));
+                        intent.putExtra("image_2", imageNames.get(1));
+                        intent.putExtra("image_3", imageNames.get(2));
+                        intent.putExtra("image_4", imageNames.get(3));
+                        intent.putExtra("image_5", imageNames.get(4));
+                        intent.putExtra("AverageRating", 0);
+                        intent.putExtra("OwnerDetails", "fdfafadfdafasdf");
+                        startActivity(intent);
 
 
-
-                    startActivity(intent);
                 }else{
                     Toast.makeText(PostAdActivity.this, "Enter all the details and try again", Toast.LENGTH_SHORT).show();
                 }
@@ -264,6 +282,9 @@ public class PostAdActivity extends AppCompatActivity
     }
 
     public boolean checkdataEntered(){
+        if(imageNames.size()<5){
+            return false;
+        }
         if(title.getText().length()==0)
             return false;
         if(subinfo1.getText().length()==0)
@@ -287,11 +308,23 @@ public class PostAdActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            intent.putExtra("Latitude",latitude);
-            intent.putExtra("Longitude",longitude);
-            intent.putExtra("Location",loc);
-            startActivity(intent);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage("Do you want to cancel the post");
+            alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
@@ -331,11 +364,7 @@ public class PostAdActivity extends AppCompatActivity
 
         } else if (id == R.id.postAds) {
 
-        } else if (id == R.id.Wishlist) {
-            Intent intent = new Intent(this,wishlist.class);
-            startActivity(intent);
-
-        } else if (id == R.id.location) {
+        }  else if (id == R.id.location) {
             Intent intent = new Intent(this,location.class);
             intent.putExtra("flag",2);
             startActivity(intent);
@@ -358,7 +387,7 @@ public class PostAdActivity extends AppCompatActivity
     Bitmap[] bitmap = new  Bitmap[6];
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-
+        Toast.makeText(this,"in activity result",Toast.LENGTH_LONG).show();
         if(requestCode < 6 && requestCode >0 && resultCode == RESULT_OK && data!=null && data.getData()!=null){
             Uri uri = data.getData();
             try{
@@ -401,7 +430,7 @@ public class PostAdActivity extends AppCompatActivity
         @Override
         protected Integer doInBackground(Integer... params) {
             Bitmap b = bitmap[params[0]-1];
-            String imagename = "priyathsaji"+sdf.format(new Date())+".png";
+            String imagename = imagestart+sdf.format(new Date())+".png";
             imageNames.add(imagename);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             b.compress(Bitmap.CompressFormat.PNG, 0, baos);
