@@ -1,5 +1,6 @@
 package com.rentit.priyath.rentitlayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ public class Details1 extends AppCompatActivity
     int type;
     String id;
     TextView title,loc,rent,sub1,sub2,sub3,sub4;
+    RatingBar averageRating;
     ImageView primaryImage;
     String image1,image2,image3,image4,image5;
 
@@ -54,7 +58,8 @@ public class Details1 extends AppCompatActivity
     TextView location;
     String comment;
     Button button;
-
+    String name,email,phone;
+    String ownerId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,9 +107,18 @@ public class Details1 extends AppCompatActivity
         sub2 = (TextView)findViewById(R.id.sub2);
         sub3 = (TextView)findViewById(R.id.sub3);
         sub4 = (TextView)findViewById(R.id.sub4);
+        averageRating = (RatingBar)findViewById(R.id.aveargeRating);
         primaryImage = (ImageView)findViewById(R.id.primaryImage);
         viewImages = (Button)findViewById(R.id.images);
         viewImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            userDetailsAsyncTask task = new userDetailsAsyncTask();
+                task.execute(ownerId);
+            }
+        });
+
+        primaryImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),imageVIewer.class);
@@ -220,6 +234,8 @@ public class Details1 extends AppCompatActivity
                 image3 = js.getString("image_3");
                 image4 = js.getString("image_4");
                 image5 = js.getString("image_5");
+                ownerId = js.getString("ownerDetails");
+                averageRating.setRating((float) js.getDouble("AverageRating"));
                 String temp;
                 if(type == 0){
                     temp = "Area :  " + js.getString("Area");
@@ -303,6 +319,67 @@ public class Details1 extends AppCompatActivity
             }
         }
     }
+    TextView owneremail,ownername,ownerphone;
+    private void initiatePopupWindow() {
+        try {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogview = inflater.inflate(R.layout.userdetailspopup, null);
 
+            owneremail = (TextView)dialogview.findViewById(R.id.owneremail);
+            ownername = (TextView)dialogview.findViewById(R.id.ownername);
+            ownerphone = (TextView)dialogview.findViewById(R.id.ownerphone);
+
+            owneremail.setText(email);
+            ownername.setText(name);
+            ownerphone.setText(phone);
+            dialogBuilder.setView(dialogview);
+            dialogBuilder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+phone));
+                    startActivity(callIntent);
+
+                }
+            });
+            AlertDialog b = dialogBuilder.create();
+            b.show();
+
+            dialogBuilder.setTitle("Review");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public class userDetailsAsyncTask extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            HttpGet httpGet = new HttpGet();
+            try {
+                String response = httpGet.getData("http://rentitapi.herokuapp.com/get_user?id="+params[0]);
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        protected void onPostExecute(String response){
+            if(response!=null) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    name = js.getString("name");
+                    phone = js.getString("phoneNumber");
+                    email = js.getString("emailId");
+                    Log.i("email",email);
+                    initiatePopupWindow();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
 
