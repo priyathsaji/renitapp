@@ -15,6 +15,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,7 +27,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -53,8 +57,11 @@ public class history extends AppCompatActivity
 
     TextView location;
     globalData globaldata;
-    TextView username;
-
+    TextView username,ownername,ownerphone,owneremail;
+    private PopupWindow pwindow;
+    String phone,name,email;
+    Boolean reviewed = false;
+    proposalAndHistoryData data1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,7 +229,18 @@ public class history extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                historyAdapter adapter = new historyAdapter(proposalAndHistoryDatas,context);
+                historyAdapter adapter = new historyAdapter(proposalAndHistoryDatas, context) {
+                    @Override
+                    void getOwnerDetails(String id) {
+                        userDetailsAsyncTask task = new userDetailsAsyncTask();
+                        task.execute(id);
+                    }
+
+                    @Override
+                    void terminateusage(proposalAndHistoryData data) {
+                        showDialog(data);
+                    }
+                };
                 /*
                 proposalAdapter adapter = new proposalAdapter(proposalAndHistoryDatas, context) {
                     @Override
@@ -256,10 +274,11 @@ public class history extends AppCompatActivity
 
             }else{
                 Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+
             }
         }
     }
-    void showDialog(proposalAndHistoryData data){
+    void showDialog(final proposalAndHistoryData data){
         //url = "http://192.168.43.87:5000/new_rating?type="+data.type+"&name="+"priyath";
         url = "http://rentitapi.herokuapp.com/new_rating?type="+data.type+"&id="+data.productId+"&name="+globaldata.getUsername();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -277,6 +296,8 @@ public class history extends AppCompatActivity
               url = url + "&rating="+ratingBar.getRating()+"&review="+review.getText().toString();
                 myAsyncTask task = new myAsyncTask();
                 task.execute(1);
+                data1 = data;
+               reviewed = true;
 
             }
         });
@@ -284,6 +305,9 @@ public class history extends AppCompatActivity
         dialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                url = "http://rentitapi.herokuapp.com/terminate_usage?type="+data.type+"&productId="+data.productId;
+                myAsyncTask task = new myAsyncTask();
+                task.execute(0);
 
             }
         });
@@ -303,6 +327,68 @@ public class history extends AppCompatActivity
                     startActivity(callIntent);
                 }
                 break;
+        }
+    }
+
+    private void initiatePopupWindow() {
+        try {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            final View dialogview = inflater.inflate(R.layout.userdetailspopup, null);
+
+            owneremail = (TextView)dialogview.findViewById(R.id.owneremail);
+            ownername = (TextView)dialogview.findViewById(R.id.ownername);
+            ownerphone = (TextView)dialogview.findViewById(R.id.ownerphone);
+
+            owneremail.setText(email);
+            ownername.setText(name);
+            ownerphone.setText(phone);
+            dialogBuilder.setView(dialogview);
+            dialogBuilder.setPositiveButton("Call", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+phone));
+                    startActivity(callIntent);
+
+                }
+            });
+            AlertDialog b = dialogBuilder.create();
+            b.show();
+
+            dialogBuilder.setTitle("Review");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public class userDetailsAsyncTask extends AsyncTask<String,Void,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            HttpGet httpGet = new HttpGet();
+            try {
+                String response = httpGet.getData("http://rentitapi.herokuapp.com/get_user?id="+params[0]);
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        protected void onPostExecute(String response){
+            if(response!=null) {
+                try {
+                    JSONObject js = new JSONObject(response);
+                    name = js.getString("name");
+                    phone = js.getString("phoneNumber");
+                    email = js.getString("emailId");
+                    Log.i("email",email);
+                    initiatePopupWindow();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

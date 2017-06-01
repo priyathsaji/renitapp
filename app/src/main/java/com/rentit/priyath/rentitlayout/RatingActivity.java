@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.google.gson.JsonObject;
@@ -46,6 +47,7 @@ public class RatingActivity extends AppCompatActivity {
         ratingDatas = new ArrayList<>();
         Intent intent = getIntent();
         String response = intent.getStringExtra("rating");
+        Log.i("rating",response);
         try {
             JSONArray jsonArray = new JSONArray(response);
             for(int i = 0;i<jsonArray.length();i++){

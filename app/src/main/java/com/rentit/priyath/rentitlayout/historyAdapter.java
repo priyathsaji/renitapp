@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by priyath on 01-06-2017.
  */
 
-public class historyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class historyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<proposalAndHistoryData> proposalAndHistoryDatas;
     Context context;
     public class viewHolder extends RecyclerView.ViewHolder{
@@ -51,15 +51,29 @@ public class historyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
         if(holder instanceof viewHolder){
+            final int pos = position;
             viewHolder viewHolder = (viewHolder)holder;
             viewHolder.title.setText(proposalAndHistoryDatas.get(position).productname);
             viewHolder.adstatus.setText(proposalAndHistoryDatas.get(position).Status);
             viewHolder.adrent.setText(""+proposalAndHistoryDatas.get(position).Rent);
-            Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+proposalAndHistoryDatas.get(position).image).fit().centerCrop().into(viewHolder.image);
-
+            //Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+proposalAndHistoryDatas.get(position).image).fit().centerCrop().into(viewHolder.image);
+            viewHolder.ownerDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getOwnerDetails(proposalAndHistoryDatas.get(pos).OwnerId);
+                }
+            });
+            viewHolder.remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    terminateusage(proposalAndHistoryDatas.get(pos));
+                }
+            });
         }
 
     }
+    abstract void getOwnerDetails(String id);
+    abstract void terminateusage(proposalAndHistoryData data);
 
     @Override
     public int getItemCount() {
