@@ -35,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -85,7 +86,7 @@ public class PostAdActivity extends AppCompatActivity
     int count =0;
     int type = 0;
     SimpleDateFormat sdf;
-    String url= "http://192.168.43.87:5000/ad_image";
+    String url= "http://rentitapi.herokuapp.com/ad_image";
 
     globalData globaldata;
     String imagestart;
@@ -344,6 +345,11 @@ public class PostAdActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this,"loged out",Toast.LENGTH_LONG).show();
+            File file =  new File("userdetails");
+            file.delete();
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 

@@ -148,6 +148,11 @@ public class chatActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this,"loged out",Toast.LENGTH_LONG).show();
+            File file =  new File("userdetails");
+            file.delete();
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -216,7 +221,7 @@ public class chatActivity extends AppCompatActivity
             HttpGet httpGet = new HttpGet();
             String response = null;
             // String link = "https://rentitapi.herokuapp.com/chat_from?toId="+toId+"&fromId"+fromId;
-            String link = "http://192.168.43.87:5000/get_chatusers?toId="+globaldata.getUserId();
+            String link = "http://rentitapi.herokuapp.com/get_chatusers?toId="+globaldata.getUserId();
             try {
                 response=httpGet.getData(link);
                 return response;

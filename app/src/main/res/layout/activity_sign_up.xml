@@ -131,13 +131,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_weight="1"
+                        android:background="@color/colorPrimary"
                         android:text="SIGN UP!"
-                        android:background="#1882ad"
                         android:textColor="@android:color/background_light"
-                        android:textSize="18sp"
-                        android:layout_alignParentLeft="true" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 

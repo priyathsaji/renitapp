@@ -5,6 +5,6 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:icon="@drawable/default_image"
-        android:title="@string/action_settings"
+        android:title="@string/action_sign_in"
         app:showAsAction="never" />
 </menu>

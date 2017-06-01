@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,7 +61,7 @@ public class AdList extends AppCompatActivity
     TextView location;
     JSONObject postData;
 
-    String url = "http://192.168.43.87:5000/get_products";
+    String url = "http://rentitapi.herokuapp.com/get_products";
     String proposalLink;
     globalData globaldata;
     TextView username;
@@ -172,7 +173,7 @@ public class AdList extends AppCompatActivity
             @Override
             public void proposal(generalAdDetails data) {
 
-                proposalLink = "http://192.168.43.87:5000/new_proposal?name="+globaldata.getUsername()+"&productName="+data.AdTitle+"&phoneNumber="+globaldata.getphonenumber()+"&rent="+data.Adcost+"&fromId="+globaldata.getUserId()+"&toId="+data.ownerId+"&productId="+data.productId+"&type="+data.type+"&image="+data.primaryImageName;
+                proposalLink = "http://rentitapi.herokuapp.com/new_proposal?name="+globaldata.getUsername()+"&productName="+data.AdTitle+"&phoneNumber="+globaldata.getphonenumber()+"&rent="+data.Adcost+"&fromId="+globaldata.getUserId()+"&toId="+data.ownerId+"&productId="+data.productId+"&type="+data.type+"&image="+data.primaryImageName;
                 proposalAsyncTask proposaltask = new proposalAsyncTask();
                 proposaltask.execute(1);
             }
@@ -248,6 +249,11 @@ public class AdList extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(this,"loged out",Toast.LENGTH_LONG).show();
+            File file =  new File("userdetails");
+            file.delete();
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 

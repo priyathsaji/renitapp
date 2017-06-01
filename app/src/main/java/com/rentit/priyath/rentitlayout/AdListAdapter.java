@@ -116,8 +116,8 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder.AdLocation.setText(gad.Location);
             viewHolder.rentCost.setText(s);
             viewHolder.AdRating.setRating(gad.adAvgRating);
-            Picasso.with(context).load("http://192.168.43.87:5000/"+image[imagenumber]).fit().centerCrop().into(viewHolder.AdImage);
-            //Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+gad.primaryImageName).fit().centerCrop().into(viewHolder.AdImage);
+            //Picasso.with(context).load("http://192.168.43.87:5000/"+image[imagenumber]).fit().centerCrop().into(viewHolder.AdImage);
+            Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+gad.primaryImageName).fit().centerCrop().into(viewHolder.AdImage);
            viewHolder.rentButton.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {

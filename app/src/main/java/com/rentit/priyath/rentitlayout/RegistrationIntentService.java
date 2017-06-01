@@ -56,7 +56,7 @@ public class RegistrationIntentService extends IntentService{
         requestBody.setUserId(userId);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.43.87:5000/")
+                .baseUrl("http://rentitapi.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -66,7 +66,7 @@ public class RegistrationIntentService extends IntentService{
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 ResponseBody responseBody = response.body();
-                Log.i("result",responseBody.getResult());
+//                Log.i("result",responseBody.getResult());
                 //Intent intent = new Intent(MainActivity.REGISTRATION_PROCESS);
                 //intent.putExtra("result", responseBody.getResult());
                // intent.putExtra("message",responseBody.getMessage());

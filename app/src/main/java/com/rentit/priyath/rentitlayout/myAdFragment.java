@@ -147,7 +147,7 @@ public class myAdFragment extends Fragment {
         @Override
         protected String doInBackground(Integer... params) {
             HttpGet httpGet = new HttpGet();
-            String link = "http://192.168.43.87:5000/get_myAds?id="+globaldata.getUserId();
+            String link = "http://rentitapi.herokuapp.com/get_myAds?id="+globaldata.getUserId();
             try {
                 response = httpGet.getData(link);
                 Log.i("response",response);

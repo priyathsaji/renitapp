@@ -16,6 +16,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -145,7 +147,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.home) {
+        if (id == R.id.action_settings) {
+            Toast.makeText(this,"loged out",Toast.LENGTH_LONG).show();
+            File file =  new File("userdetails");
+            file.delete();
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 

@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -99,7 +100,7 @@ public class history extends AppCompatActivity
 
         proposalAndHistoryDatas = new ArrayList<>();
 
-        url = "http://192.168.43.87:5000/get_history?Id="+globaldata.getUserId();
+        url = "http://rentitapi.herokuapp.com/get_history?Id="+globaldata.getUserId();
         myAsyncTask task = new myAsyncTask();
         task.execute(0);
     }
@@ -129,7 +130,12 @@ public class history extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.History) {
+        if (id == R.id.action_settings) {
+            Toast.makeText(this,"loged out",Toast.LENGTH_LONG).show();
+            File file =  new File("userdetails");
+            file.delete();
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -191,6 +197,7 @@ public class history extends AppCompatActivity
         }
 
         protected void onPostExecute(String result) {
+            if(result !=null)
             if (result.charAt(0) == '[') {
                 try {
                     JSONArray jsonArray = new JSONArray(result);
@@ -201,6 +208,7 @@ public class history extends AppCompatActivity
                         data.name = "";
                         data.productname = js.getString("productName");
                         data.phoneNumber = "";
+                        data.image= js.getString("image");
                         data.Rent = js.getInt("rent");
                         data.CusomerId = js.getString("Id");
                         data.OwnerId = js.getString("ownerId");
@@ -214,6 +222,8 @@ public class history extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                historyAdapter adapter = new historyAdapter(proposalAndHistoryDatas,context);
+                /*
                 proposalAdapter adapter = new proposalAdapter(proposalAndHistoryDatas, context) {
                     @Override
                     public void button1function(proposalAndHistoryData data) {
@@ -232,12 +242,14 @@ public class history extends AppCompatActivity
 
                     @Override
                     public void button3function(proposalAndHistoryData data) {
-                        url = "http://192.168.43.87:5000/terminate_usage?type="+data.type+"&productId="+data.productId;
+                        url = "http://rentitapi.herokuapp.com/terminate_usage?type="+data.type+"&productId="+data.productId;
                         myAsyncTask task = new myAsyncTask();
                         task.execute(0);
 
                     }
                 };
+
+                */
                 recyclerView.setAdapter(adapter);
                 progressBar.setVisibility(View.GONE);
 
@@ -249,7 +261,7 @@ public class history extends AppCompatActivity
     }
     void showDialog(proposalAndHistoryData data){
         //url = "http://192.168.43.87:5000/new_rating?type="+data.type+"&name="+"priyath";
-        url = "http://192.168.43.87:5000/new_rating?type="+data.type+"&id="+data.productId+"&name="+globaldata.getUsername();
+        url = "http://rentitapi.herokuapp.com/new_rating?type="+data.type+"&id="+data.productId+"&name="+globaldata.getUsername();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater =  this.getLayoutInflater();
         final View dialogview = inflater.inflate(R.layout.dialogbox,null);

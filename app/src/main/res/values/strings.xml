@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_signup">Sign In</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_details1">Details1</string>
     <string name="title_activity_my_ads">myAds</string>

@@ -135,7 +135,7 @@ public class SignUp extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... integers) {
             HttpPost httpPost = new HttpPost() ;
-            String response = httpPost.postData(params , "http://192.168.43.87:5000/new_user");
+            String response = httpPost.postData(params , "http://rentitapi.herokuapp.com/new_user");
             return response;
         }
 

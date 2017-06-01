@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... integers) {
             HttpPost httpPost = new HttpPost();
-            String response = httpPost.postData(params , "http://192.168.43.87:5000/authentication");
+            String response = httpPost.postData(params , "http://rentitapi.herokuapp.com/authentication");
             return response;
         }
 

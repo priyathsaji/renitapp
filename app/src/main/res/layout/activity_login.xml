@@ -80,13 +80,13 @@
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="250dp"
+            android:background="@color/colorPrimary"
             android:text="LOGIN"
-            android:background="#1882ad"
             android:textColor="@android:color/background_light"
-            android:textSize="18sp"
-            android:layout_marginLeft="0dp" />
+            android:textSize="18sp" />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_below="@+id/etPassword"
@@ -108,16 +108,15 @@
                 android:layout_marginLeft="16dp" />
 
             <Button
+                android:id="@+id/signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
-                android:background="#1882ad"
-                android:textColor="@android:color/background_light"
                 android:layout_alignParentEnd="true"
-                android:id = "@+id/signup"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
-                />
+                android:background="@color/colorPrimary"
+                android:text="Sign Up"
+                android:textColor="@android:color/background_light" />
 
 
         </RelativeLayout>

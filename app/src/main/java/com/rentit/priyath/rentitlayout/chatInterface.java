@@ -173,7 +173,7 @@ public class chatInterface extends AppCompatActivity {
                     postparams.put("name",d.name);
                     postparams.put("productName",d.productName);
                     HttpPost httpPost = new HttpPost();
-                    String response = httpPost.postData(postparams,"http://192.168.43.87:5000/chat_to");
+                    String response = httpPost.postData(postparams,"http://rentitapi.herokuapp.com/chat_to");
 //                    Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
                     return response;
                 } catch (JSONException e) {
@@ -183,7 +183,7 @@ public class chatInterface extends AppCompatActivity {
             }else if (params[0]==0){
                 HttpGet httpGet = new HttpGet();
                // String link = "https://rentitapi.herokuapp.com/chat_from?toId="+toId+"&fromId"+fromId;
-                String link = "http://192.168.43.87:5000/chat_from?fromId="+fromId+"&toId="+toId;
+                String link = "http://rentitapi.herokuapp.com/chat_from?fromId="+fromId+"&toId="+toId;
                 try {
                     response=httpGet.getData(link);
                     return response;

@@ -187,7 +187,7 @@ public class location extends FragmentActivity
         @Override
         protected String doInBackground(Integer... params) {
             HttpPost httpPost = new HttpPost();
-            String response = httpPost.postData(postData,"http://192.168.43.87:5000/new_product");
+            String response = httpPost.postData(postData,"http://rentitapi.herokuapp.com/new_product");
             return response;
         }
         protected void onPostExecute(String response){

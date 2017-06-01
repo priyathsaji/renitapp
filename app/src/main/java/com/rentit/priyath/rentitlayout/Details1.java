@@ -200,7 +200,7 @@ public class Details1 extends AppCompatActivity
             HttpGet httpGet = new HttpGet();
             String response = null;
             try {
-                response= httpGet.getData("http://192.168.43.87:5000/purticular_product?type="+type+"&id="+id);
+                response= httpGet.getData("http://rentitapi.herokuapp.com/purticular_product?type="+type+"&id="+id);
                 Log.i("response",response);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -211,7 +211,7 @@ public class Details1 extends AppCompatActivity
         protected void onPostExecute(String response){
             try {
                 JSONObject js = new JSONObject(response);
-                //Picasso.with(getApplicationContext()).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+js.getString("image_1")).fit().centerCrop().into(primaryImage);
+                Picasso.with(getApplicationContext()).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+js.getString("image_1")).fit().centerCrop().into(primaryImage);
                 title.setText(js.getString("Title"));
                 loc.setText(js.getString("Location"));
                 rent.setText("Rent :  "+js.getString("Rent"));

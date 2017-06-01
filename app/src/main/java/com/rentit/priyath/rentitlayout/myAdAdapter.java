@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -68,7 +70,7 @@ public abstract class myAdAdapter extends RecyclerView.Adapter<RecyclerView.View
         viewHolder.adLocation.setText(gad.Location);
         viewHolder.adRent.setText(s);
         viewHolder.adRating.setRating(gad.adAvgRating);
-        //Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+gad.primaryImageName).fit().centerCrop().into(viewHolder.AdImage);
+        Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+gad.primaryImageName).fit().centerCrop().into(viewHolder.adImage);
         viewHolder.adStatus.setText(gad.status);
         viewHolder.removeAd.setOnClickListener(new View.OnClickListener() {
             @Override

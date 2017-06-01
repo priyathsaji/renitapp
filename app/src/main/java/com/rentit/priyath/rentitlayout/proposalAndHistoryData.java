@@ -9,6 +9,7 @@ public class proposalAndHistoryData {
     String phoneNumber;
     String productname;
     int Rent;
+    String image;
     String OwnerId;
     String CusomerId;
     String Status;

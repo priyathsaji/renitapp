@@ -99,7 +99,7 @@ public class proposalFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             HttpGet httpGet = new HttpGet();
-            String link = "http://192.168.43.87:5000/get_proposal?toId="+globaldata.getUserId();
+            String link = "http://rentitapi.herokuapp.com/get_proposal?toId="+globaldata.getUserId();
             try {
                 String Response = httpGet.getData(link);
                 return Response;
@@ -123,7 +123,7 @@ public class proposalFragment extends Fragment {
                         data.Rent = js.getInt("rent");
                         data.CusomerId = js.getString("fromId");
                         data.OwnerId = js.getString("toId");
-                       data.type = js.getInt("type");
+                       //data.type = js.getInt("type");
                        data.productId=js.getString("productId");
                         data.Status = "";
                        data.isproposal = true;
@@ -141,14 +141,14 @@ public class proposalFragment extends Fragment {
 
                 @Override
                 public void button2function(proposalAndHistoryData data) {
-                    url = "http://192.168.43.87:5000/disapprove?fromId="+globaldata.getUserId()+"&toId="+data.CusomerId+"&productId="+data.productId;
+                    url = "http://rentitapi.herokuapp.com/disapprove?fromId="+globaldata.getUserId()+"&toId="+data.CusomerId+"&productId="+data.productId;
                     decisionTask task = new decisionTask();
                     task.execute(1);
                 }
 
                 @Override
                 public void button3function(proposalAndHistoryData data) {
-                    url = "http://192.168.43.87:5000/approve?fromId="+globaldata.getUserId()+"&toId="+data.CusomerId+"&productId="+data.productId+"&type="+data.type;
+                    url = "http://rentitapi.herokuapp.com/approve?fromId="+globaldata.getUserId()+"&toId="+data.CusomerId+"&productId="+data.productId+"&type="+data.type;
                     decisionTask task = new decisionTask();
                     task.execute(1);
                 }
