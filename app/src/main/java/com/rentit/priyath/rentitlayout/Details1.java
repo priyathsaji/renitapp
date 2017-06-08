@@ -127,6 +127,7 @@ public class Details1 extends AppCompatActivity
                 intent.putExtra("image3",image3);
                 intent.putExtra("image4",image4);
                 intent.putExtra("image5",image5);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getApplicationContext().startActivity(intent);
             }
         });

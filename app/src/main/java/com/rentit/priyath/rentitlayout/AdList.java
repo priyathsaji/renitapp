@@ -142,10 +142,11 @@ public class AdList extends AppCompatActivity
 
         adlistadapter = new AdListAdapter(AdDetails, context) {
             @Override
-            public void startChat(String toId) {
+            public void startChat(String toId,String title) {
                 Intent intent = new Intent(AdList.this,chatInterface.class);
                 intent.putExtra("fromId",toId);
                 intent.putExtra("toId",globaldata.getUserId());
+                intent.putExtra("productName",title);
                 startActivity(intent);
             }
             @Override

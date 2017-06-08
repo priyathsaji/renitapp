@@ -45,6 +45,7 @@ public class chatInterface extends AppCompatActivity {
     globalData globaldata;
     String productOwner;
     TextView productowner;
+    String productName;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class chatInterface extends AppCompatActivity {
         getintent =  getIntent();
         fromId = getintent.getStringExtra("fromId");
         productOwner = getintent.getStringExtra("ownername");
+        productName = getintent.getStringExtra("productName");
         productowner = (TextView)findViewById(R.id.productOwner);
         productowner.setText(productOwner);
         globaldata = (globalData)getApplicationContext();
@@ -80,7 +82,7 @@ public class chatInterface extends AppCompatActivity {
                 d.type = 1;
                 d.toId = fromId;//product owner
                 d.fromId = globaldata.getUserId();
-                d.productName = "something new";
+                d.productName = productName;
                 chatDatas.add(d);
                 adapter.notifyDataSetChanged();
                 toMessage.setText("");

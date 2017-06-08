@@ -136,6 +136,9 @@ public class SplashActivity extends AppCompatActivity {
             try {
                 location = placefinder.getLocation(latitude,longitude,SplashActivity.this);
                 globaldata.addLocation(location);
+
+                intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -148,8 +151,7 @@ public class SplashActivity extends AppCompatActivity {
             // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
         }
-        intent = new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(intent);
+
     }
 
     private String getDeviceId(){

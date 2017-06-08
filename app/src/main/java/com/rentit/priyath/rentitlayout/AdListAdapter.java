@@ -106,7 +106,7 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder,int position) {
-        final int pos = position;
+        final int  pos = position;
         if(holder instanceof viewHolder) {
             viewHolder viewHolder = (viewHolder)holder;
 
@@ -128,7 +128,7 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder.chatButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startChat(AdData.get(pos-1).ownerId);
+                    startChat(AdData.get(pos-1).ownerId,AdData.get(pos-1).AdTitle);
                     Log.i("toId",AdData.get(pos-1).ownerId);
                 }
             });
@@ -141,6 +141,7 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     intent.putExtra("type",AdData.get(pos-1).type);
                     intent.putExtra("id",AdData.get(pos-1).productId);
                     intent.putExtra("ownername",AdData.get(pos-1).ownerId);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }
             });
@@ -168,7 +169,7 @@ public abstract class AdListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
     }
-    public abstract  void startChat(String toId);
+    public abstract  void startChat(String toId,String title);
     public abstract void refreshdata(int left,int right);
     public abstract int geturlnumber();
     public abstract void proposal(generalAdDetails data);

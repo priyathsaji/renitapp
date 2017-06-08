@@ -1,6 +1,8 @@
 package com.rentit.priyath.rentitlayout;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -136,6 +138,9 @@ public class proposalFragment extends Fragment {
             proposalAdapter adapter = new proposalAdapter(proposalAndHistoryDatas, context) {
                 @Override
                 public void button1function(proposalAndHistoryData data) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+data.phoneNumber));
+                    startActivity(callIntent);
 
                 }
 

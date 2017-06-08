@@ -61,6 +61,7 @@ public class chatuseradapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 intent.putExtra("toId",chatUsers.get(position).toId);
                 intent.putExtra("fromId",chatUsers.get(position).fromId);
                 intent.putExtra("ownername",chatUsers.get(position).ownerName);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

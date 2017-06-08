@@ -45,6 +45,7 @@ public class myAdFragment extends Fragment {
     ProgressBar progressbar;
     String userId;
     globalData globaldata;
+    String url;
 
     public myAdFragment() {
         // Required empty public constructor
@@ -137,7 +138,24 @@ public class myAdFragment extends Fragment {
 
         @Override
         protected String doInBackground(Integer... params) {
+            HttpGet httpGet = new HttpGet();
+            try {
+                String response = httpGet.getData(url);
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return null;
+        }
+
+        protected void onPostExecute(String response){
+            if(response==null){
+                Toast.makeText(context,"Error removing the Ad",Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(context,response,Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context,myAds.class);
+                startActivity(intent);
+            }
         }
     }
 
@@ -191,7 +209,9 @@ public class myAdFragment extends Fragment {
                 adapter = new myAdAdapter(generalAdDetails, context) {
                     @Override
                     void removeAd(String productId, int type) {
-
+                        url="http://rentitapi.herokuapp.com/remove_ad?productId="+productId+"&type="+type;
+                        removeAdAsyncTask task = new removeAdAsyncTask();
+                        task.execute(0);
                     }
                 };
                 recyclerView.setAdapter(adapter);

@@ -56,7 +56,7 @@ public abstract class historyAdapter extends RecyclerView.Adapter<RecyclerView.V
             viewHolder.title.setText(proposalAndHistoryDatas.get(position).productname);
             viewHolder.adstatus.setText(proposalAndHistoryDatas.get(position).Status);
             viewHolder.adrent.setText(""+proposalAndHistoryDatas.get(position).Rent);
-            //Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+proposalAndHistoryDatas.get(position).image).fit().centerCrop().into(viewHolder.image);
+            Picasso.with(context).load("https://s3.ap-south-1.amazonaws.com/rentit-profile-pics/"+proposalAndHistoryDatas.get(position).image).fit().centerCrop().into(viewHolder.image);
             viewHolder.ownerDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
