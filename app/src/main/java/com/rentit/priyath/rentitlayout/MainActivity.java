@@ -200,12 +200,11 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         }else if (id == R.id.chat) {
-            Intent intent =  new Intent(this,chatActivity.class);
-            intent.putExtra("Latitude",latitude);
-            intent.putExtra("Longitude",longitude);
-            intent.putExtra("Location",loc);
+            Intent intent = new Intent(this, chatActivity.class);
+            intent.putExtra("Latitude", latitude);
+            intent.putExtra("Longitude", longitude);
+            intent.putExtra("Location", loc);
             startActivity(intent);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

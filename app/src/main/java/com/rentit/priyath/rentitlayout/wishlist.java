@@ -1,9 +1,14 @@
 package com.rentit.priyath.rentitlayout;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +18,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class wishlist extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
+    Context context;
+    ArrayList<proposalAndHistoryData> proposalAndHistoryDatas;
+    String url;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +54,63 @@ public class wishlist extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //navigationView.setCheckedItem(R.id.Wishlist);
+        context = getApplicationContext();
+        recyclerView = (RecyclerView)findViewById(R.id.wishlistRecyclerView);
+        layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        proposalAndHistoryDatas = new ArrayList<>();
+        url = "http://192.168.43.49:5000/get_wishlist?id=some";
+
+        wishlistfetch task = new wishlistfetch();
+        task.execute(1);
     }
+
+   public class wishlistfetch extends AsyncTask<Integer,Void,String>{
+
+       @Override
+       protected String doInBackground(Integer... params) {
+           HttpGet httpGet = new HttpGet();
+           try {
+               String response = httpGet.getData(url);
+               return response;
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+           return null;
+       }
+
+       @Override
+       protected void onPostExecute(String s) {
+           super.onPostExecute(s);
+           if(s!=null) {
+               Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+               try {
+                   JSONArray jsonArray = new JSONArray(s);
+                   for (int i = 0; i < jsonArray.length(); i++) {
+                       proposalAndHistoryData data = new proposalAndHistoryData();
+                       JSONObject js = jsonArray.getJSONObject(i);
+                       data.name = js.getString("");
+                       data.name = "";
+                       data.productname = js.getString("productName");
+                       data.phoneNumber = "";
+                       data.image = js.getString("image");
+                       data.Rent = js.getInt("rent");
+                       data.CusomerId = js.getString("Id");
+                       data.OwnerId = js.getString("ownerId");
+                       data.Status = js.getString("status");
+                       data.productId = js.getString("productId");
+                       data.type = js.getInt("type");
+                       data.isproposal = false;
+                       proposalAndHistoryDatas.add(data);
+
+                   }
+               } catch (JSONException e) {
+                   e.printStackTrace();
+               }
+           }
+
+       }
+   }
 
     @Override
     public void onBackPressed() {

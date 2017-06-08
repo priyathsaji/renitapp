@@ -62,6 +62,7 @@ public class history extends AppCompatActivity
     String phone,name,email;
     Boolean reviewed = false;
     proposalAndHistoryData data1;
+    String link;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -273,6 +274,12 @@ public class history extends AppCompatActivity
 
 
             }else{
+                if(reviewed){
+                    reviewed = false;
+                    TerminateUsage task = new TerminateUsage();
+                    task.execute(1);
+
+                }
                 Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
 
             }
@@ -294,10 +301,13 @@ public class history extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
 
               url = url + "&rating="+ratingBar.getRating()+"&review="+review.getText().toString();
-                myAsyncTask task = new myAsyncTask();
-                task.execute(1);
+
                 data1 = data;
                reviewed = true;
+                myAsyncTask task = new myAsyncTask();
+                task.execute(1);
+                link = "http://rentitapi.herokuapp.com/terminate_usage?type="+data.type+"&productId="+data.productId;
+
 
             }
         });
@@ -314,6 +324,32 @@ public class history extends AppCompatActivity
 
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    public class TerminateUsage extends AsyncTask<Integer,Void,String>{
+
+        @Override
+        protected String doInBackground(Integer... params) {
+
+            try {
+                HttpGet httpGet = new HttpGet();
+                String response = null;
+                response = httpGet.getData(link);
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s!=null){
+                Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
